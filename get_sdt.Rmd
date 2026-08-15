@@ -1,0 +1,892 @@
+---
+title: "Get SDT indices from trials"
+output: html_document
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(foreign)
+library(openxlsx)
+library(readxl)
+library(tidyverse)
+library(data.table) 
+library(dplyr)
+library(stringr)
+library(stringi)
+library(vctrs)
+library(pander)
+library(ggplot2)
+library(ggrepel)
+library(ggdist)
+library(ggforce)
+#library(gghalves)
+library(ggpubr)
+library(ggpmisc)  # put corr labels on scatterplot
+library(ggh4x)    # nested facets
+library(lm.beta)
+library(emmeans)
+library(cocor)
+library(grid)
+library(gridExtra)
+library(cowplot)
+library(patchwork)
+
+source("sdt.R")
+
+set.seed(5183)
+
+select=dplyr::select
+recode=dplyr::recode
+rename=dplyr::rename
+
+`%nin%` = Negate(`%in%`)
+
+today = Sys.Date() 
+
+# RStudio menu >> session >> set working directory >> to source file location 
+
+```
+
+v3 notes:
+- using v2's clean data from `s01_clean_raw_data.Rmd`, no need to redo data cleaning steps 
+
+# load clean trials
+```{r}
+
+all_trials = read.csv("./data_clean/all_trials_clean.csv") %>% 
+  group_by(subj) %>% tidyr::fill(subj_rand) %>% ungroup() %>% 
+  group_by(subj,subj_rand,task,cond) %>% 
+  select(-c(n_trial)) %>% 
+  mutate(num_trials = n(),
+         i_trial = 1:n(),
+         # split all test blocks halves and quads 
+         half = ifelse(i_trial <= num_trials/2, 1, 2),
+         quad = case_when(i_trial <= num_trials/4   ~ 1,
+                          i_trial <= num_trials/2   ~ 2,
+                          i_trial <= num_trials/4*3 ~ 3,
+                          TRUE ~ 4)) %>% ungroup() %>% 
+  mutate(exp = factor(exp, labels=c("Exp. 1", "Exp. 2", "Exp. 3")),
+         task = factor(task,levels = c("baseline","prob","false_feed"),
+                       labels = c("Baseline", "Strategic", "FPF")),
+         cond = factor(cond, levels = c("con","lib"),
+                       labels = c("Conservative","Liberal"))) %>% 
+  mutate(cond_label = factor(cond, levels = c("Conservative","Liberal")))
+# keep this full df for plotting c over time 
+
+all_trials %>% count(task,cond)
+
+conds_color_2 = c("#E69F00","#0072B2")
+conds_shape_2 = c("\u25B2", "\u25BC")
+#conds_color_3 = c("darkgray","#E69F00","#0072B2")
+
+# all_trials %>% filter(exp=="FPF01",task=="false_feed")
+# all_trials %>% count(exp,subj,subj_rand) %>% count(subj) %>% filter(n>=2)  # check for duplicate subs
+# all_trials %>% count(exp,task,cond,subj)  # check trial count 
+# all_trials %>% count(exp,task,cond,subj,quad)  # check half/quad trials 
+
+# remove FPF first half for all sdt analyses
+trials = all_trials %>% filter(!(task=="false_feed" & half==1)) %>% 
+  select(-c(i_trial, num_trials, half, quad, subj_rand, subID_num))
+
+```
+
+
+
+
+# calculate SDT + descriptives
+
+```{r}
+sdt_subj = trials %>% group_by(exp,subj,task,cond) %>% prep_sdt() %>% 
+  mutate(percent_fpf = case_when(task=="FPF" & cond=="Conservative" ~ n_isfpf/n_miss,
+                                 task=="FPF" & cond=="Liberal" ~ n_isfpf/n_fa,
+                                 TRUE ~ NA_real_)) %>% 
+  group_by(exp,subj,task,cond) %>% 
+  get_sdt() %>% ungroup()
+
+sdt_des_raw = sdt_subj %>% group_by(exp,task,cond) %>% 
+  summarise(across(c(raw_hr,raw_far,da,c2,n_isfpf,percent_fpf,medRT),
+                   list(mean = ~mean(.x, na.rm = TRUE),
+                        sd   = ~sd(.x, na.rm = TRUE)),
+                   .names = "{.col}_{.fn}")) 
+
+cshift_subj = sdt_subj %>% select(exp,subj,task,cond,c2) %>% 
+  pivot_wider(names_from = cond, values_from = c2) %>% 
+  mutate(cshift = Conservative-Liberal) 
+
+cshift_des = cshift_subj %>% 
+  group_by(exp,task) %>% 
+  summarise(cshift_mean = mean(cshift,na.rm=TRUE),
+            cshift_sd = sd(cshift,na.rm=TRUE)) %>% 
+  mutate(cshift = sprintf("%.2f (%.2f)", cshift_mean, cshift_sd)) %>% 
+  select(exp,task,cshift)
+
+sdt_des = sdt_des_raw %>% 
+  pivot_longer(-c(exp,task,cond), names_to = c("var","stat"),
+               names_pattern = "(.*)_(mean|sd)$") %>%
+  pivot_wider(names_from = stat, values_from = value) %>%
+  mutate(mean = case_when(var=="percent_fpf" ~ mean*100,
+                          TRUE ~ mean),
+         sd = case_when(var=="percent_fpf" ~ sd*100,
+                        TRUE ~ sd)) %>% 
+  mutate(meansd = case_when(var %in% c("raw_hr","raw_far","da","c2") ~ sprintf("%.2f (%.2f)", mean, sd),
+                            var == "percent_fpf" ~ sprintf("%.1f%% (%.1f%%)", mean, sd),
+                            TRUE ~ sprintf("%.1f (%.1f)", mean, sd))) %>%
+  select(-mean, -sd) %>%
+  pivot_wider(names_from = var, values_from = meansd) %>% 
+  mutate(across(c(n_isfpf,percent_fpf), ~case_when(task!="FPF" ~ NA, 
+                                                   TRUE ~ .x))) %>% 
+  merge(cshift_des)
+
+
+write.xlsx(sdt_des,"./tables/sdt_descriptives.xlsx")
+
+library(flextable)
+flextable(sdt_des) %>% autofit %>% save_as_docx(path="./tables/sdt_descriptives.docx")
+```
+
+
+<!--Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in dplyr 1.1.0.
+Please use `reframe()` instead.
+When switching from `summarise()` to `reframe()`, remember that `reframe()` always returns an ungrouped data frame and adjust accordingly.`summarise()` has grouped output by 'exp', 'subj', 'task', 'cond'. You can override using the `.groups` argument.-->
+
+
+# calculate + plot sdt
+
+```{r sdt by task x cond}
+sdt_long = sdt_subj %>% 
+  pivot_longer(cols=c(dpr,cri,da,c2),names_to=c("idx")) %>% 
+  mutate(type = case_when(idx %in% c("dpr","cri") ~ "ev",
+                          idx %in% c("da","c2") ~ "uv"))
+
+
+c_uv = ggplot(sdt_long %>% filter(type=="uv",idx=="c2"),
+              aes(x=cond,y=value,color=cond,fill=cond,group=subj)) +
+  geom_point(size=0.3,position=position_jitter(width=0.2),shape=16) +
+  geom_line(aes(group=subj),color="lightgray",size=0.1,alpha=0.5) +
+  facet_grid(rows=vars(exp),cols=vars(task),scales="free_x") +
+  scale_color_manual(values=conds_color_2) +
+  scale_fill_manual(values=conds_color_2) +
+  # labs(title="unequal variance c2",x="",y="Criterion",color="Condition",fill="Condition") +
+  labs(title=NULL,x=NULL,y="Criterion",color="Condition",fill="Condition") +
+  theme_bw() +
+  theme(legend.position="bottom") +
+  guides(color = guide_legend(override.aes = list(size = 2, alpha = 1)))
+
+c_uv
+
+#ggsave("./ggsave/c_taskcond.pdf",plot=c_uv)
+
+
+# ggplot(sdt_long, aes(x=cond,y=value,color=cond,group=subj)) +
+#   geom_point(size=0.1,position=position_jitter()) +
+#   geom_line(aes(group=subj),color="lightgray",size=0.1,alpha=0.5) +
+#   facet_grid(rows=vars(exp),cols=vars(task,type)) +
+#   labs(title="c & c2") +
+#   theme(legend.position = "bottom") +
+#   theme_bw()
+
+```
+
+
+
+```{r sdt by task x cond x quad}
+trials_summ_quad = all_trials %>% group_by(exp,subj,task,cond,quad) %>% prep_sdt()
+
+sdt_quad = trials_summ_quad %>% get_sdt() %>% 
+  select(exp,subj,task,cond,quad,dpr,cri,da,c2) 
+
+# cor.test(sdt$cri,sdt$c2)   # r=1
+# cor.test(sdt$dpr,sdt$da)   # r=.95
+
+sdt_long_quad = sdt_quad %>% 
+  pivot_longer(cols=c(dpr,cri,da,c2),names_to=c("idx")) %>% 
+  mutate(type = case_when(idx %in% c("dpr","cri") ~ "ev",
+                          idx %in% c("da","c2") ~ "uv")) %>% 
+  mutate(cond_quad = paste0(cond,"-",as.character(quad))) #%>% 
+# mutate(cond_quad2 = str_replace(cond_quad,"Conservative-","C"),
+#        cond_quad2 = str_replace(cond_quad2,"Liberal-","L"),)
+
+x_labels = c(
+  "Conservative-1" = "C1",
+  "Conservative-2" = "C2",
+  "Conservative-3" = "C3",
+  "Conservative-4" = "C4",
+  "Liberal-1" = "L1",
+  "Liberal-2" = "L2",
+  "Liberal-3" = "L3",
+  "Liberal-4" = "L4"
+)
+
+c_uv_quad = ggplot(sdt_long_quad %>% filter(type=="uv",idx=="c2"), 
+                   aes(x=cond_quad,y=value,color=cond,fill=cond)) +
+  geom_point(size=0.3,position=position_jitter(width=0.2),alpha=0.9,shape=16) +
+  geom_line(aes(group=subj),color="lightgray",size=0.1,alpha=0.5) +
+  facet_grid(rows=vars(exp),cols=vars(task),scales="free_x") +
+  scale_color_manual(values=conds_color_2) +
+  scale_fill_manual(values=conds_color_2) +
+  scale_x_discrete(labels=x_labels) +
+  labs(title=NULL,x=NULL,y="Criterion",color="Condition",fill="Condition") +
+  theme_bw() +
+  theme(legend.position="bottom") +
+  #theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6)) +
+  guides(color = guide_legend(override.aes = list(size = 2, alpha = 1)))
+
+c_uv_quad
+
+#ggsave("./ggsave/c_taskcond_quad.pdf",plot=c_uv_quad)
+
+
+```
+
+# cshift temporal dynamics [quad modeling]
+
+```{r lmer model: c by exp x task x cond x quad}
+library(emmeans)
+
+# make sure sdt_long uses all trials
+x = sdt_long_quad %>% 
+  filter(type=="uv",idx=="c2") %>% 
+  mutate(quad = quad-mean(quad))
+lmer1 = lmerTest::lmer(value ~ exp * task*cond*quad  + (1|subj), data = x)
+summary(lmer1)
+
+
+x1 = x %>% filter(exp=="Exp. 1") 
+x2 = x %>% filter(exp=="Exp. 2")
+x3 = x %>% filter(exp=="Exp. 3")
+
+lmer1_x1 = lmerTest::lmer(value ~ task*cond*quad + (1|subj), data = x1)
+summary(lmer1_x1)
+#lmer2 = lmerTest::lmer(value ~ task*cond*quad + (quad|subj), data = x)
+#anova(lmer1,lmer2)
+
+# get quad slope for each task x cond combination
+emtrends(lmer1_x1, ~ task | cond, var = "quad")
+emtrends(lmer1_x1, pairwise ~ task | cond, var = "quad")
+
+lmer1_x2 = lmerTest::lmer(value ~ task*cond*quad + (1|subj), data = x2)
+summary(lmer1_x2)
+
+lmer1_x3 = lmerTest::lmer(value ~ task*cond*quad + (1|subj), data = x3)
+summary(lmer1_x3)
+```
+
+
+```{r lmer model attempts, eval=FALSE}
+# subj random slopes
+m1 = lmer(value ~ task*cond*quad + (1 + quad | subj), data = x1)  # singular
+#m2 = lmer(c ~ task*cond*quad + (1 + quad*cond | subj), data = x1)
+
+m1 = lmer(value ~ task*cond*quad + (1 + quad || subj), data = x1)  # still singular
+
+isSingular(m1)
+
+```
+
+
+```{r plot quad slopes}
+
+# get quad slopes for each task x cond
+get_pred_lines = function(fit, exp_label) {
+  emmeans(fit, ~ quad | task + cond, at = list(quad = 1:4)) %>%
+    as.data.frame() %>%
+    mutate(cond_quad = paste0(cond, "-", quad),
+           exp = exp_label)
+}
+
+pred_lines = bind_rows(
+  get_pred_lines(lmer1_x1, "Exp. 1"),
+  get_pred_lines(lmer1_x2, "Exp. 2"),
+  get_pred_lines(lmer1_x3, "Exp. 3")
+)
+
+# overlay slopes on descriptive plot
+c_uv_with_slopes = c_uv_quad +
+  geom_line(data = pred_lines,
+            aes(x = cond_quad, y = emmean, group = interaction(cond, task), color = cond),
+            inherit.aes = FALSE) +
+  geom_point(data = pred_lines,
+             aes(x = cond_quad, y = emmean, color = cond),
+             inherit.aes = FALSE,size=1)
+c_uv_with_slopes
+
+# format label text
+slope_labels = 
+  purrr::imap_dfr(list("Exp. 1"=lmer1_x1, "Exp. 2"=lmer1_x2, "Exp. 3"=lmer1_x3),
+                  function(fit, label) {
+                    emtrends(fit, ~ task | cond, var = "quad") %>%
+                      summary(infer = c(TRUE, TRUE)) %>%
+                      as.data.frame() %>%
+                      mutate(exp = label,
+                             cond_quad = paste0(cond, "-4"),
+                             label_text = sprintf("b = %.3f, p %s", quad.trend,
+                                                  ifelse(p.value < .001, "< .001", sprintf("= %.2f", p.value))))  # use \u03B2 for beta
+                  }) %>% 
+  mutate(
+    label_y = case_when(
+      # cond == "Liberal" ~ y_high + 0.2,       # above scatterplot
+      # cond == "Conservative" ~ y_low - 0.2    # below scatterplot
+      cond == "Conservative" ~ -1.25,   # fixed to bottom
+      cond == "Liberal"      ~ 1.5      # fixed to top
+    ),
+    label_vjust = case_when(
+      cond == "Conservative" ~ 1,    # top
+      cond == "Liberal" ~ 0,        # bottom
+    )
+  )
+
+# add labels 
+c_uv_with_slopes +
+  geom_text(data = slope_labels,
+            aes(x = cond_quad, y = label_y, label = label_text, color = cond, vjust = label_vjust),
+            inherit.aes = FALSE, hjust = 1, size = 2.5, show.legend = FALSE) 
+
+#ggsave("./ggsave/c_taskcond_quad_with_slopes.pdf",device=cairo_pdf, width=7, height=7)
+
+```
+
+
+
+
+
+# type 2 sdt / m-ratio 
+```{r calculate type2 sdt m-ratio}
+
+# get resp type counts at each conf level
+resp_conf_counts = trials %>% filter(exp=="Exp. 3") %>% 
+  rename(conf = response_confidence) %>% 
+  count(exp,subj,task,cond,resp_type_real,conf) %>% 
+  pivot_wider(names_from=c("resp_type_real","conf"),values_from=n) %>% 
+  mutate(across(c(cr_high:fa_high),~replace_na(.x,0)))
+
+type2sdt_prep = sdt_subj %>% filter(exp=="Exp. 3") %>% select(exp,subj,task,cond,da,c_far) %>% 
+  merge(resp_conf_counts) %>% 
+  filter(da!=0)  # estimation doesnt work with da==0
+# n=1 excluded for da==0
+
+type2sdt = type2sdt_prep %>% 
+  get_sdt_type2() %>% 
+  filter(mratio>0) %>% 
+  mutate(log_mratio = log(mratio))
+# n=1 excluded for mratio<=0
+
+type2sdt_df = type2sdt %>% select(exp,subj,task,cond,log_mratio,mratio) %>% 
+  mutate(taskcond = paste0(task,"\n",cond),
+         taskcond = factor(taskcond, levels=c("Strategic\nConservative","Strategic\nLiberal",
+                                              "FPF\nConservative","FPF\nLiberal"))) 
+
+mratio.lm = lmerTest::lmer(log_mratio ~ task*cond + (1|subj), data=type2sdt_df)
+summary(mratio.lm)
+confint(mratio.lm)
+
+```
+
+
+```{r plot mratio by cond}
+
+get_se = function(x) {
+  se = sd(x, na.rm = TRUE) / sqrt(104)
+  return(se)
+}
+
+# verify SEM
+type2sdt_df %>% group_by(taskcond) %>% 
+  summarise(sd = sd(log_mratio),
+            se = sd/sqrt(104),
+            se2 = get_se(log_mratio))
+
+# ggplot(type2sdt_df, aes(x = cond, y = log_mratio, color = cond, group = subj)) +
+#   geom_point(size = 1, position = position_jitter(width = 0.1), alpha = 0.6, shape = 16) +
+#   geom_line(aes(group = subj), color = "lightgray", linewidth = 0.2, alpha = 0.4) +
+#   stat_summary(aes(group = cond), fun = mean, geom = "point", size = 1, color = "black") +
+#   stat_summary(aes(group = cond), fun.data = mean_se, geom = "errorbar", width = 0.15, color = "black", linewidth = 0.6) +
+#   facet_grid(rows = vars(exp), cols = vars(task)) +
+#   scale_color_manual(values = c("Conservative" = "#0072B2", "Liberal" = "#E69F00")) +
+#   labs(x = NULL, y = "log(M-ratio)", color = "Condition") +
+#   theme_bw() +
+#   theme(legend.position = "bottom")
+
+ggplot(type2sdt_df, aes(x = taskcond, y = log_mratio, group = subj)) +
+  geom_point(size = 1, position = position_jitter(width = 0.1), alpha = 0.6, shape = 16) +
+  geom_line(aes(group = subj), color = "lightgray", linewidth = 0.2, alpha = 0.4) +
+  # stat_summary(aes(group = cond), fun = mean, geom = "point", size = 1, color = "black") +
+  # stat_summary(aes(group = cond), fun.data = mean_se, geom = "errorbar", width = 0.15, color = "black", linewidth = 0.6) +
+  stat_summary(aes(group = taskcond), fun = function(x) mean(x,na.rm=TRUE),
+               fun.min = function(x) mean(x,na.rm=TRUE) - get_se(x),
+               fun.max = function(x) mean(x,na.rm=TRUE) + get_se(x),
+               geom = "pointrange", size=0.3, fatten=1.5,position = position_nudge(x =-0.2),color="blue",
+               linewidth = 0.5) +
+  facet_grid(cols = vars(exp)) +
+  labs(x = NULL, y = "log(M-ratio)") +
+  theme_bw() 
+
+#ggsave("./ggsave/mratio_taskcond.pdf",width=4,height=4)
+
+```
+
+
+# DTD
+```{r}
+dtd_df = read.csv("./data_clean/dtd_03.csv") %>% 
+  rename(t1 = trial_1, t2 = trial_2, t3 = trial_3) %>% 
+  mutate(t1.x = replace_na(t1,11),
+         t2.x = replace_na(t2,11),
+         t3.x = replace_na(t3,11)) %>% 
+  mutate(mean_dtd1 = rowMeans(select(.,t1,t2,t3)),  # removing subj with any NA trials
+         mean_dtd2 = rowMeans(select(.,t1,t2,t3),na.rm=TRUE),  # remove NA trials only
+         mean_dtdx = rowMeans(select(.,t1.x,t2.x,t3.x))) %>%   # NA trials imputed as 11
+  select(subj,mean_dtd1,mean_dtd2,mean_dtdx)
+
+dtd_df %>% select(contains("dtd")) %>% psych::describe()
+
+cshift_dtd = cshift_subj %>% filter(exp=="Exp. 3") %>% 
+  pivot_wider(names_from=task,values_from=c(Conservative,Liberal,cshift)) %>% 
+  merge(dtd_df) 
+cor(cshift_dtd %>% select(-exp,-subj),use="complete.obs")
+
+cshift_dtd_long = cshift_subj %>% filter(exp=="Exp. 3") %>% merge(dtd_df)
+
+library(rstatix)
+cshift_dtd %>% select(-exp,-subj) %>% 
+  cor_mat() %>%
+  pull_lower_triangle() %>%
+  cor_gather() %>% 
+  filter(str_detect(var1,"dtd")|str_detect(var2,"dtd"))
+
+plot_dtd_corr = function(df,col) {
+  p = ggplot(df, aes(x = {{col}}, y = cshift)) +
+    geom_point(size=1,alpha = 0.7, shape=16) +
+    geom_smooth(method = "lm", se = TRUE) +
+    ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+    #facet_grid(cols = vars(task), scales = "free") +
+    ggh4x::facet_nested(cols=vars(exp,task),scales="free_x") +
+    labs(x = "Mean DTD", y = "Criterion shifting (\u0394c)") +
+    theme_bw()
+  
+  return(p)
+}
+
+
+plot_dtd_corr(cshift_dtd_long, col=mean_dtd1)
+p_dtd_corr = plot_dtd_corr(cshift_dtd_long, col=mean_dtd2)
+p_dtd_corr
+plot_dtd_corr(cshift_dtd_long, col=mean_dtdx)
+
+#ggsave("./ggsave/dtd_cshift_corr.pdf",plot=p_dtd_corr, width=8,height=4,device=cairo_pdf)
+
+```
+
+
+
+# confidence [SKIP]
+```{r exp3 trials - confidence}
+conf_fpf = trials %>% filter(exp=="Exp. 3",task=="FPF") %>% 
+  rename(conf = response_confidence) %>% 
+  mutate(conf_high = case_when(conf=="low" ~ 0,
+                               conf=="high" ~ 1)) %>% 
+  mutate(is_criticalerror = case_when(cond=="Liberal" & resp_type_real=="fa" ~ 1,
+                                      cond=="Conservative" & resp_type_real=="miss" ~ 1,
+                                      TRUE ~ 0),
+         sayold = case_when(resp_type_real %in% c("hit","fa") ~ 1,
+                            resp_type_real %in% c("miss","cr") ~ 0),
+         is_reinforced = case_when(cond=="Liberal" & resp_type_real %in% c("hit","fa") ~ 1,
+                                   cond=="Conservative" & resp_type_real %in% c("miss","cr") ~ 1,
+                                   TRUE ~ 0)) %>% 
+  group_by(subj,task,cond) %>% 
+  mutate(prev_trial_fpf = lag(ifelse(trial_is_fpf==1,1,0)),
+         prev_trial_resptype = lag(resp_type_real),
+         prev_criticalerror = lag(ifelse(is_criticalerror==1,1,0)),
+         prev_reinforced = lag(ifelse(is_reinforced==1,1,0))) %>% 
+  mutate(prev_trial_feedtype = case_when(prev_trial_fpf==1 ~ "FPF",
+                                         prev_trial_fpf==0 & prev_trial_resptype %in% c("hit","cr") ~ "true_pos",
+                                         prev_trial_fpf==0 & prev_trial_resptype %in% c("miss","fa") ~ "true_neg",
+                                         TRUE ~ NA)) %>% 
+  mutate(prev_trial_feedtype = factor(prev_trial_feedtype,levels=c("true_neg","true_pos","FPF"))) %>% 
+  mutate(conf_high = as.factor(conf_high),
+         sayold = as.factor(sayold),
+         trial_is_fpf = as.factor(trial_is_fpf),
+         prev_trial_fpf = as.factor(prev_trial_fpf),
+         is_criticalerror = as.factor(is_criticalerror),
+         prev_criticalerror = as.factor(prev_criticalerror),
+         is_reinforced = as.factor(is_reinforced),
+         prev_reinforced = as.factor(prev_reinforced)) %>% ungroup() #%>% 
+#select(subj,task,cond,trial_is_fpf,prev_trial_fpf,is_criticalerror,everything())
+
+conf_fpf %>% count(cond,prev_trial_fpf,resp_type_real)
+
+```
+
+
+
+- (1) on the group level, does FPF lead to higher confidence in "old" responses in the liberal condition and "new" responses in the conservative condition? *then* 
+- (2) on the individual level, does this effect depend on the person (are there broad individual differences)? 
+*note:* filter to prior trial critical error only
+
+```{r conf model}
+conf_fpf_reinforced = conf_fpf %>% filter(prev_reinforced==1)   # n=18735 trials
+conf_fpf_err = conf_fpf %>% filter(prev_criticalerror==1)  # n=7085 trials
+
+library(brms)
+library(bayesplot)
+
+# try || instead of | if not converging - remove random effect corrs, use non correlated slopes instead
+# - this means model will still estimate subj random slopes but NOT corr between those slopes 
+
+model_conf = conf_high ~ prev_trial_fpf * is_reinforced + (1 + prev_trial_fpf * is_reinforced || subj) 
+fpf_conf.m = brms::brm(model_conf, data = conf_fpf_err, family = bernoulli(link="logit"),
+                       prior = c(prior(normal(0, 1.5), class = "b"),   # weakly informative prior on log odds scale
+                                 prior(exponential(1), class = "sd")), # mean/sd of 1 on log odds scale
+                       chains = 4, cores = 4, iter = 5000, warmup = 1000, 
+                       control = list(adapt_delta = 0.95))  # smaller step sizes; default 0.8
+summary(fpf_conf.m)
+#saveRDS(fpf_conf.m, "./models/fpf_conf.rds", compress = "gzip")
+```
+
+```{r}
+conf_fpf_err_con = conf_fpf_err %>% filter(cond=="Conservative")
+conf_fpf_err_lib = conf_fpf_err %>% filter(cond=="Liberal")
+
+fpf_conf_con.m = update(fpf_conf.m, newdata = conf_fpf_err_con)
+fpf_conf_lib.m = update(fpf_conf.m, newdata = conf_fpf_err_lib)
+
+summary(fpf_conf_con.m)
+summary(fpf_conf_lib.m)
+
+library(rethinking)
+#precis(fpf_conf_con.m)
+
+```
+
+
+
+```{r group/individual effects}
+# group level FPF fixed effect - post prob 
+hypothesis(fpf_conf.m, "prev_trial_fpf1 > 0")  # no group level effect
+hypothesis(fpf_conf.m, "is_reinforced1 > 0")  # higher conf for reinforced direction resp REGARDLESS of prior feedback
+hypothesis(fpf_conf.m, "prev_trial_fpf1:is_reinforced1 > 0")  # no effect that FPF matters for reinforced direction resp
+hypothesis(fpf_conf.m, "prev_trial_fpf1 + prev_trial_fpf1:is_reinforced1 = 0")
+
+# individual differences 
+mcmc_areas(fpf_conf.m, pars = "sd_subj__prev_trial_fpf1:is_reinforced1") +
+  geom_vline(xintercept = 0)
+```
+
+
+```{r group/individual effects - FPF}
+coef_fpf = coef(fpf_conf.m)$subj[, , "prev_trial_fpf1"] %>% as.data.frame() %>% 
+  rownames_to_column("subj") %>% arrange(Estimate) %>% 
+  mutate(subj = factor(subj, levels = subj))
+
+p_subjef_fpf = ggplot(coef_fpf, aes(x = Estimate, y = subj)) +
+  geom_pointrange(aes(xmin = Q2.5, xmax = Q97.5), linewidth = 0.1,size=0.1,shape=16) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  scale_y_discrete(breaks=NULL) +
+  labs(#x = "Individual FPF effect on high confidence responding (log-odds)", 
+    x = "Log odds", y = "Participant", subtitle="FPF effect"
+    #, caption = "Error bars represent 95% credible intervals"
+  ) +
+  theme_bw() + 
+  theme(axis.text.y = element_blank())
+p_subjef_fpf
+#ggsave("./ggsave/coef_highconf_fpf.pdf", plot=p_subjef_fpf)
+
+# check how many participants had real nonzero effects
+n_pos = sum(coef_fpf_reinforced$Q2.5 > 0)
+n_neg = sum(coef_fpf_reinforced$Q97.5 < 0)
+```
+
+
+```{r group/individual effects - FPF x reinforced}
+coef_fpf_reinforced = coef(fpf_conf.m)$subj[, , "prev_trial_fpf1:is_reinforced1"] %>% as.data.frame() %>% 
+  rownames_to_column("subj") %>% arrange(Estimate) %>% 
+  mutate(subj = factor(subj, levels = subj))
+
+p_subjef_fpf_reinforced = ggplot(coef_fpf_reinforced, aes(x = Estimate, y = subj)) +
+  geom_pointrange(aes(xmin = Q2.5, xmax = Q97.5), linewidth = 0.1,size=0.1,shape=16) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  scale_y_discrete(breaks=NULL) +
+  labs(#x = "Individual FPF × reinforced-direction effect on high confidence responding (log-odds)", 
+    x = "Log odds", y = "Participant", subtitle="FPF × reinforced-direction interaction"
+    #, caption = "Error bars represent 95% credible intervals"
+  ) +
+  theme_bw() + 
+  theme(axis.text.y = element_blank())
+p_subjef_fpf_reinforced
+#ggsave("./ggsave/coef_highconf_fpf_reinforced.pdf", plot=p_subjef_fpf_reinforced)
+
+# check how many participants had real nonzero effects
+n_pos = sum(coef_fpf_reinforced$Q2.5 > 0)
+n_neg = sum(coef_fpf_reinforced$Q97.5 < 0)
+```
+
+
+
+
+```{r group/individual effects - reinforced direction}
+
+coef_reinforced = coef(fpf_conf.m)$subj[, , "is_reinforced1"] %>% as.data.frame() %>% 
+  rownames_to_column("subj") %>% arrange(Estimate) %>% 
+  mutate(subj = factor(subj, levels = subj))
+
+# ggplot(coef_reinforced, aes(x = Estimate, y = subj)) +
+#   geom_pointrange(aes(xmin = Estimate-Est.Error, xmax = Estimate+Est.Error), linewidth = 0.3,size=0.2,shape=16) +
+#   geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+#   labs(x = "Individual reinforced-response effect on confidence (log-odds)", y = "Participant",
+#        caption = "Error bars represent SE.") +
+#   theme_bw() + 
+#   theme(axis.text.y = element_blank())
+
+p_subjef_reinforced = ggplot(coef_reinforced, aes(x = Estimate, y = subj)) +
+  geom_pointrange(aes(xmin = Q2.5, xmax = Q97.5), linewidth = 0.1,size=0.1,shape=16) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  scale_y_discrete(breaks=NULL) +
+  labs(#x = "Individual reinforced-direction effect on high confidence responding (log-odds)", 
+    x = "Log odds", y = "Participant", subtitle="Reinforced-direction effect"
+    #, caption = "Error bars represent 95% credible intervals"
+  ) +
+  theme_bw() + 
+  theme(axis.text.y = element_blank()) 
+p_subjef_reinforced
+#ggsave("./ggsave/coef_highconf_reinforced.pdf",plot=p_subjef_reinforced)
+
+n_pos = sum(coef_reinforced$Q2.5 > 0)
+n_neg = sum(coef_reinforced$Q97.5 < 0)
+
+
+higherconf_list = coef_reinforced %>% filter(coef_reinforced$Q2.5 > 0) 
+
+```
+
+
+```{r assemble plots}
+(p_subjef_fpf / p_subjef_fpf_reinforced / p_subjef_reinforced) +
+  plot_annotation(tag_levels = list(c("(a)","(b)","(c)"))) +
+  plot_annotation(caption = "Error bars represent 95% credible intervals")
+#ggsave("./ggsave/coef_conf_all_v.pdf",width=4,height=12)
+```
+
+
+```{r individual slopes vs sdt measures corr}
+cshift_exp3_fpf = cshift_subj %>% filter(exp=="Exp. 3",task=="FPF") 
+type2sdt_df_fpf = type2sdt_df %>% filter(task=="FPF") %>% select(subj,cond,mratio,log_mratio) %>% 
+  pivot_wider(names_from=cond,values_from=c(mratio,log_mratio))
+
+# meta c / percent high conf 
+conf_fpf_metac = conf_fpf  %>% group_by(subj) %>% 
+  summarise(n_trial = n(),
+            n_highconf = sum(conf_high=="1"),
+            meta_c = n_highconf/n_trial) %>% select(subj,meta_c) %>% 
+  rename(meta_c_all = meta_c)
+
+conf_fpf_metac_err = conf_fpf_err  %>% group_by(subj) %>% 
+  summarise(n_trial = n(),
+            n_highconf = sum(conf_high=="1"),
+            meta_c = n_highconf/n_trial) %>% select(subj,meta_c) %>% 
+  rename(meta_c_err = meta_c)
+
+conf_fpf_metac = merge(conf_fpf_metac,conf_fpf_metac_err)
+
+test_coef_df = coef_reinforced %>% merge(cshift_exp3_fpf) %>% merge(type2sdt_df_fpf) %>% merge(dtd_df) %>% 
+  merge(conf_fpf_metac) %>% 
+  rename(b=Estimate, b_se = Est.Error, c_con = Conservative, c_lib = Liberal) %>% 
+  filter(subj %in% higherconf_list$subj)
+
+cor.test(test_coef_df$cshift,test_coef_df$b)
+cor.test(test_coef_df$mean_dtd2,test_coef_df$b)
+cor.test(test_coef_df$c_con,test_coef_df$b)
+cor.test(test_coef_df$c_lib,test_coef_df$b)
+cor.test(test_coef_df$log_mratio_Conservative,test_coef_df$b)
+cor.test(test_coef_df$log_mratio_Liberal,test_coef_df$b)
+cor.test(test_coef_df$log_mratio_Liberal,test_coef_df$b)
+cor.test(test_coef_df$meta_c_all,test_coef_df$b)
+```
+
+
+
+# plot cshift (c by task cond) by cshift order
+
+```{r plot c by exp x task x cond with trend lines}
+# get rank for each task
+cshift_rank = cshift_subj %>% 
+  group_by(exp,task) %>% 
+  # do not use min_rank() in case of ties
+  arrange(cshift,Conservative,.by_group=TRUE) %>% 
+  mutate(rank_real = row_number())  %>% ungroup() 
+
+rank_fpf = cshift_rank %>% filter(task=="FPF") %>% 
+  rename(rank_fpf = rank_real) %>% 
+  select(exp,subj,rank_fpf)
+
+cshift_rank_fpf = merge(cshift_rank,rank_fpf,by=c("exp","subj"))
+
+c_taskcond_rank_fpf = cshift_rank_fpf %>% 
+  pivot_longer(cols=c(Conservative,Liberal),names_to="cond",values_to="c2")
+
+plot_c_by_rank = function(df,tag) {
+  p = ggplot(df, aes(x=rank_fpf, y=c2,color=cond,shape=cond)) +
+    facet_nested(rows=vars(exp,task),scales="free_x") +
+    geom_point(size=2,alpha=0.7) +
+    geom_smooth(method="lm", size=0.5, se=TRUE) +
+    geom_hline(yintercept=0, linetype=2) +
+    scale_x_continuous(breaks=NULL) +
+    scale_shape_manual(values=conds_shape_2) +
+    scale_colour_manual(values=conds_color_2) +
+    theme_bw() +
+    labs(x="Participant",y="Criterion",shape="Condition",color="Condition",
+         tag=tag) +
+    theme(legend.position="none", 
+          panel.grid.major = element_blank())  
+  
+  return(p)
+}
+
+p1 = plot_c_by_rank(c_taskcond_rank_fpf %>% filter(exp=="Exp. 1"), tag="(1a)")
+p1_with_legend = p1 +
+  theme(legend.position=c(0.5,0.92), legend.direction = "horizontal")
+p2 = plot_c_by_rank(c_taskcond_rank_fpf %>% filter(exp=="Exp. 2"), tag="(2a)")
+p3 = plot_c_by_rank(c_taskcond_rank_fpf %>% filter(exp=="Exp. 3"), tag="(3a)")
+
+p_cshift_v = (p1 / p2 / p3) + 
+  plot_layout(guides = "collect", heights=c(2,3,2)) +
+  plot_annotation(caption = "Participants are rank-ordered by FPF criterion shifting within each experiment.",
+                  theme = theme(plot.caption = element_text(hjust=0.5,size=9,face="italic"))) & # use & not + [!!!]
+  theme(legend.position = "bottom")
+
+#ggsave("./ggsave/c_taskcond_individual_v.pdf",plot=p_cshift_v,device=cairo_pdf, width=9,height=11)
+
+
+```
+
+# plot cshift corr for each exp
+```{r}
+
+cshift_wide = cshift_rank  %>% select(exp,subj,task,cshift) %>% 
+  filter(!(exp=="Exp. 2" & task=="Baseline")) %>% 
+  pivot_wider(names_from=task, values_from=cshift)
+
+library(ggpmisc)
+plot_cshift_corr = function(df,tag) {
+  p = ggplot(df,aes(x=Strategic,y=FPF)) +
+    coord_fixed(ratio=1) +
+    geom_point(size=1,alpha=0.7,shape=16) +   
+    xlim(-1,4.7) +
+    ylim(-1,4.7) +
+    geom_smooth(method='lm',se=TRUE) +
+    ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+    labs(x="Strategic \u0394c", y="FPF \u0394c",
+         tag=tag) +
+    geom_hline(yintercept=0, linetype=2, alpha=0.5) +
+    geom_vline(xintercept=0, linetype=2, alpha=0.5) +
+    theme_bw()
+  
+  return(p)
+}
+
+corr1 = plot_cshift_corr(cshift_wide %>% filter(exp=="Exp. 1"),tag="(1b)")
+corr2 = plot_cshift_corr(cshift_wide %>% filter(exp=="Exp. 2"),tag="(2b)")
+corr3 = plot_cshift_corr(cshift_wide %>% filter(exp=="Exp. 3"),tag="(3b)")
+
+p_corr_v = (corr1 / corr2 / corr3) + 
+  plot_layout(guides = "collect") #& # use & not + [!!!]
+#theme(plot.tag.location = "panel")
+
+#ggsave("./ggsave/cshift_corr_v.pdf",plot=p_corr_v,device=cairo_pdf, width=3,height=9)
+
+```
+
+
+# assemble cshift plots (individual + corr)
+```{r}
+cshift_large_layout <- c(
+  area(t=1,  b=4,  l=1, r=8),
+  area(t=5,  b=10, l=1, r=8),
+  area(t=11, b=14, l=1, r=8),
+  area(t=1,  b=4,  l=9, r=12),
+  area(t=7,  b=10, l=9, r=12),
+  area(t=11, b=14, l=9, r=12)
+)
+
+cshift_allplot_large = p1_with_legend + p2 + p3 + corr1 + corr2 + corr3 + 
+  plot_layout(design=cshift_large_layout) +
+  plot_annotation(caption = "Participants are rank-ordered by FPF criterion shifting within each experiment.",
+                  theme = theme(plot.caption = element_text(hjust=0.25,face="italic"))) 
+#ggsave("./ggsave/cshift_complete.pdf",plot=cshift_allplot_large, device=cairo_pdf,width=12,height=14)
+
+```
+
+
+
+# test sdt
+```{r lmer for da, c2, cshift}
+#sdt_subj
+#cshift_subj
+
+# DO NOT USE ANOVA if including exp in the model
+
+get_sdt_pairwise_df = function(dv,df) {
+  model = as.formula(paste(dv,"~ exp*task*cond + (1|subj)"))
+  lm = lmerTest::lmer(model, data = df)
+  emm = emmeans(lm, ~cond | exp*task)
+  emm_df = data.frame(emm) %>% filter(!is.na(emmean)) %>% 
+    select(exp,task,cond,emmean) %>% 
+    pivot_wider(names_from = cond, values_from = emmean)
+  
+  pairs = pairs(emm, adjust="holm")
+  df_out = data.frame(pairs) %>%   # don't use as.data.frame()
+    filter(!is.na(estimate)) %>% merge(emm_df) %>% 
+    arrange(exp,task) %>% 
+    mutate(t.ratio = round(t.ratio,2),
+           p.value = round(p.value,4),
+           idx = dv) %>% select(idx,exp,task,Conservative,Liberal,everything())
+  return(df_out)
+}
+
+da_pairs_df = get_sdt_pairwise_df(df = sdt_subj, dv="da")
+c2_pairs_df = get_sdt_pairwise_df(df = sdt_subj, dv="c2")
+
+cshift_lmer = lmerTest::lmer(cshift ~ task*exp + (1|subj), data = cshift_subj)
+cshift_emm  = emmeans(cshift_lmer, ~task|exp) 
+cshift_emm_df = data.frame(cshift_emm) %>% filter(!is.na(emmean)) %>% 
+  select(exp,task,emmean) %>% 
+  pivot_wider(names_from=task,values_from=emmean)
+
+cshift_pairs_df = data.frame(pairs(cshift_emm, adjust="holm")) %>% 
+  filter(!is.na(estimate)) %>% merge(cshift_emm_df) %>% 
+  select(exp,Baseline,Strategic,FPF,everything()) %>% 
+  mutate(t.ratio = round(t.ratio,2),
+         p.value = round(p.value,4))
+
+da_pairs_df
+c2_pairs_df
+cshift_pairs_df
+
+```
+
+
+# ========== TO DO =============
+
+*REMOVE PLOTS:*
+- old fig3 [c by taskcond]
+- old fig7 [RT]
+
+*REDO PLOTS:*
+- *done* old fig4 [c by taskcond + corr]: redo with c2 
+- *done* old fig5 [DTD ~ cshift exp3]: redo with c2
+- *done* old fig6 [mratio]: redo with new mratio
+- *done* old fig8 [next trial conf by FPF]
+
+*ADD PLOTS:*
+- *done* temporal dynamics [quad with slopes]
+
+*TRY:*
+- temporal dynamics with ONLY participants who did FPF task first [so they have no reason to suspect opposite test conditions ]
+- smaller bins? 
+
+*ANALYSIS:*
+- *done* 2x2 anova / lmer + group means for da & c2
+- SURVEY 
+
+
+```{r}
+#sessioninfo::session_info(to_file = "sessionInfo.txt")
+```
+
