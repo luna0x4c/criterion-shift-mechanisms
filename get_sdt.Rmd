@@ -101,6 +101,7 @@ sdt_subj = trials %>% group_by(exp,subj,task,cond) %>% prep_sdt() %>%
                                  TRUE ~ NA_real_)) %>% 
   group_by(exp,subj,task,cond) %>% 
   get_sdt() %>% ungroup()
+#write.csv(sdt_subj,"./stats/sdt_type1.csv",row.names=FALSE)
 
 sdt_des_raw = sdt_subj %>% group_by(exp,task,cond) %>% 
   summarise(across(c(raw_hr,raw_far,da,c2,n_isfpf,percent_fpf,medRT),
@@ -156,7 +157,6 @@ sdt_long = sdt_subj %>%
   pivot_longer(cols=c(dpr,cri,da,c2),names_to=c("idx")) %>% 
   mutate(type = case_when(idx %in% c("dpr","cri") ~ "ev",
                           idx %in% c("da","c2") ~ "uv"))
-
 
 c_uv = ggplot(sdt_long %>% filter(type=="uv",idx=="c2"),
               aes(x=cond,y=value,color=cond,fill=cond,group=subj)) +
@@ -373,6 +373,7 @@ type2sdt_df = type2sdt %>% select(exp,subj,task,cond,log_mratio,mratio) %>%
   mutate(taskcond = paste0(task,"\n",cond),
          taskcond = factor(taskcond, levels=c("Strategic\nConservative","Strategic\nLiberal",
                                               "FPF\nConservative","FPF\nLiberal"))) 
+#write.csv(type2sdt_df,"./stats/sdt_type2.csv",row.names = FALSE)
 
 mratio.lm = lmerTest::lmer(log_mratio ~ task*cond + (1|subj), data=type2sdt_df)
 summary(mratio.lm)
@@ -477,7 +478,7 @@ plot_dtd_corr(cshift_dtd_long, col=mean_dtdx)
 
 
 
-# confidence [SKIP]
+# confidence 
 ```{r exp3 trials - confidence}
 conf_fpf = trials %>% filter(exp=="Exp. 3",task=="FPF") %>% 
   rename(conf = response_confidence) %>% 
@@ -514,7 +515,6 @@ conf_fpf = trials %>% filter(exp=="Exp. 3",task=="FPF") %>%
 conf_fpf %>% count(cond,prev_trial_fpf,resp_type_real)
 
 ```
-
 
 
 - (1) on the group level, does FPF lead to higher confidence in "old" responses in the liberal condition and "new" responses in the conservative condition? *then* 
@@ -883,7 +883,35 @@ cshift_pairs_df
 
 *ANALYSIS:*
 - *done* 2x2 anova / lmer + group means for da & c2
-- SURVEY 
+- SURVEY  
+
+# survey 
+```{r}
+survey01 = read.csv("./data_clean/survey_valid_01.csv")
+survey02 = read.csv("./data_clean/survey_valid_02.csv")
+survey03 = read.csv("./data_clean/survey_valid_03.csv")
+
+survey_raw = bind_rows(list(survey01,survey02,survey03)) %>% 
+  select(-comments,-contains("text"),contains("disclose"))
+
+fpf_aware = survey_raw %>% filter(str_detect(fpf_aware,"Yes") | str_detect(all_feedback_aware,"misleading") | str_detect(which_feedback_false,"showed percentage") | str_detect(false_feedback_nature,"NOT correct"))
+
+fpf_aware %>% filter(exp=="FPF01") %>% count(false_feedback_nature)
+
+
+fpf_aware %>% count(exp,used_feedback)
+fpf_aware %>% count(exp,used_percentage)
+fpf_aware %>% count(exp,fpf_aware)
+fpf_aware %>% count(exp,all_feedback_aware)
+fpf_aware %>% count(exp,which_feedback_false)
+fpf_aware %>% count(exp,fprob_aware)
+fpf_aware %>% count(exp,conf_strategy)
+fpf_aware %>% count(exp,self_bias)
+
+
+survey_raw %>% filter(exp=="FPF03") %>% select(exp,subj,self_bias) 
+```
+
 
 
 ```{r}

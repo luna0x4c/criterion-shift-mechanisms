@@ -3,6 +3,7 @@
 **Table of contents**:  
 
 - `data_clean` folder contains all the trial-by-trial data  
+- `stats` folder: subject-level SDT summary statistics   
 - `get_sdt.Rmd` contains the main analysis code used to calculate SDT indices, run models, and generate figures/tables   
 - `sdt.R` contains several custom SDT-related wrapper functions used in the analysis (sensitivity, criterion, M-ratio, etc.)  
 - `ggsave` folder: all figures except Fig.1  

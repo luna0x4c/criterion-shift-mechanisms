@@ -1,0 +1,829 @@
+"exp","subj","task","cond","log_mratio","mratio","taskcond"
+"Exp. 3","BFTW","FPF","Conservative",0.0281030315153305,1.0285016470458,"FPF
+Conservative"
+"Exp. 3","BFTW","FPF","Liberal",0.163642626813952,1.1777933281183,"FPF
+Liberal"
+"Exp. 3","BFTW","Strategic","Conservative",-0.028534413572809,0.971868848091276,"Strategic
+Conservative"
+"Exp. 3","BFTW","Strategic","Liberal",0.056285606985615,1.057899784162,"Strategic
+Liberal"
+"Exp. 3","BKGH","FPF","Conservative",0.0694972925787985,1.07196915892881,"FPF
+Conservative"
+"Exp. 3","BKGH","FPF","Liberal",-0.0652643992050954,0.936819736235838,"FPF
+Liberal"
+"Exp. 3","BKGH","Strategic","Conservative",0.0369770378380466,1.03766919343652,"Strategic
+Conservative"
+"Exp. 3","BKGH","Strategic","Liberal",0.0117170117849274,1.01178592485626,"Strategic
+Liberal"
+"Exp. 3","BPVX","FPF","Conservative",-0.0706149439158244,0.931820626258281,"FPF
+Conservative"
+"Exp. 3","BPVX","FPF","Liberal",0.00541786763695155,1.00543257082313,"FPF
+Liberal"
+"Exp. 3","BPVX","Strategic","Conservative",-0.00864936373478668,0.991387934399215,"Strategic
+Conservative"
+"Exp. 3","BPVX","Strategic","Liberal",-0.00677748749399919,0.993245427875597,"Strategic
+Liberal"
+"Exp. 3","BRCW","FPF","Conservative",1.30074930607368e-05,1.00001300757766,"FPF
+Conservative"
+"Exp. 3","BRCW","FPF","Liberal",0.0115571542382947,1.01162419616771,"FPF
+Liberal"
+"Exp. 3","BRCW","Strategic","Conservative",0.0174712301008168,1.0176247447683,"Strategic
+Conservative"
+"Exp. 3","BRCW","Strategic","Liberal",0.0147001218724159,1.01480870004903,"Strategic
+Liberal"
+"Exp. 3","BZGK","FPF","Conservative",-0.0364426103091079,0.964213428219099,"FPF
+Conservative"
+"Exp. 3","BZGK","FPF","Liberal",-0.0451279741610141,0.955875146685467,"FPF
+Liberal"
+"Exp. 3","BZGK","Strategic","Conservative",-0.000669114808767165,0.999331108998626,"Strategic
+Conservative"
+"Exp. 3","BZGK","Strategic","Liberal",0.0120915814017643,1.01216498010931,"Strategic
+Liberal"
+"Exp. 3","CBTN","FPF","Conservative",-0.101266257347045,0.903692386113029,"FPF
+Conservative"
+"Exp. 3","CBTN","FPF","Liberal",0.0198690962685327,1.02006780060509,"FPF
+Liberal"
+"Exp. 3","CBTN","Strategic","Conservative",-0.0449267572848369,0.956067504248643,"Strategic
+Conservative"
+"Exp. 3","CBTN","Strategic","Liberal",0.243998551732977,1.27634248200339,"Strategic
+Liberal"
+"Exp. 3","CHBN","FPF","Conservative",-0.0351263273298325,0.965483441608187,"FPF
+Conservative"
+"Exp. 3","CHBN","FPF","Liberal",-0.0978036983098343,0.906826897935822,"FPF
+Liberal"
+"Exp. 3","CHBN","Strategic","Conservative",-0.00659847228729626,0.993423249827117,"Strategic
+Conservative"
+"Exp. 3","CHBN","Strategic","Liberal",0.000601165844778328,1.00060134658118,"Strategic
+Liberal"
+"Exp. 3","CPZH","FPF","Conservative",0.00203488078271409,1.00203695255765,"FPF
+Conservative"
+"Exp. 3","CPZH","FPF","Liberal",-0.190287586184312,0.826721346115336,"FPF
+Liberal"
+"Exp. 3","CPZH","Strategic","Conservative",0.115245380511173,1.12214875722718,"Strategic
+Conservative"
+"Exp. 3","CPZH","Strategic","Liberal",0.0908166163719024,1.09506816927012,"Strategic
+Liberal"
+"Exp. 3","CTSB","FPF","Conservative",-0.548758721723839,0.577666410304496,"FPF
+Conservative"
+"Exp. 3","CTSB","FPF","Liberal",-0.132852954832077,0.875593834485491,"FPF
+Liberal"
+"Exp. 3","CTSB","Strategic","Conservative",-0.0923653587663618,0.91177196480255,"Strategic
+Conservative"
+"Exp. 3","CTSB","Strategic","Liberal",0.0553914249286288,1.05695425195888,"Strategic
+Liberal"
+"Exp. 3","DBZM","FPF","Conservative",0.00142309684270847,1.00142410992553,"FPF
+Conservative"
+"Exp. 3","DBZM","FPF","Liberal",0.132133505178106,1.14126067330644,"FPF
+Liberal"
+"Exp. 3","DBZM","Strategic","Conservative",-0.0157518114625171,0.98437159948797,"Strategic
+Conservative"
+"Exp. 3","DBZM","Strategic","Liberal",0.115775587804027,1.12274388643891,"Strategic
+Liberal"
+"Exp. 3","DCSK","FPF","Conservative",-0.189300999392467,0.827537380954355,"FPF
+Conservative"
+"Exp. 3","DCSK","FPF","Liberal",0.0181129222111962,1.0182779560962,"FPF
+Liberal"
+"Exp. 3","DCSK","Strategic","Conservative",0.043079590885804,1.044020986099,"Strategic
+Conservative"
+"Exp. 3","DCSK","Strategic","Liberal",-0.0637635639422438,0.938226803955223,"Strategic
+Liberal"
+"Exp. 3","DRNY","FPF","Conservative",0.0144404828912429,1.01454525035445,"FPF
+Conservative"
+"Exp. 3","DRNY","FPF","Liberal",-0.0336936820494982,0.966867628191485,"FPF
+Liberal"
+"Exp. 3","DRNY","Strategic","Conservative",-0.123351476756147,0.883952919049885,"Strategic
+Conservative"
+"Exp. 3","DRNY","Strategic","Liberal",0.0487960391487087,1.05000616874636,"Strategic
+Liberal"
+"Exp. 3","DZFG","FPF","Conservative",-0.00481555234430735,0.995196023838524,"FPF
+Conservative"
+"Exp. 3","DZFG","FPF","Liberal",0.035872119409049,1.03652328680475,"FPF
+Liberal"
+"Exp. 3","DZFG","Strategic","Conservative",0.00662977928356414,1.00665180491837,"Strategic
+Conservative"
+"Exp. 3","DZFG","Strategic","Liberal",0.0900911075100328,1.09427397574102,"Strategic
+Liberal"
+"Exp. 3","FGYC","FPF","Conservative",-1.40957510619152e-05,0.999985904348283,"FPF
+Conservative"
+"Exp. 3","FGYC","FPF","Liberal",3.62498805881567e-05,1.00003625053762,"FPF
+Liberal"
+"Exp. 3","FGYC","Strategic","Conservative",-0.030299353635495,0.970155070627725,"Strategic
+Conservative"
+"Exp. 3","FGYC","Strategic","Liberal",0.511597500534094,1.6679536245694,"Strategic
+Liberal"
+"Exp. 3","FMXR","FPF","Conservative",0.0104358536197177,1.01049049705832,"FPF
+Conservative"
+"Exp. 3","FMXR","FPF","Liberal",0.063837062228371,1.06591870619262,"FPF
+Liberal"
+"Exp. 3","FMXR","Strategic","Liberal",-0.048736786802683,0.952431789325091,"Strategic
+Liberal"
+"Exp. 3","FNYS","FPF","Conservative",-0.01635646382856,0.983776576780347,"FPF
+Conservative"
+"Exp. 3","FNYS","FPF","Liberal",-0.426782345121486,0.652605579559006,"FPF
+Liberal"
+"Exp. 3","FNYS","Strategic","Conservative",-0.141373732445999,0.868164789708858,"Strategic
+Conservative"
+"Exp. 3","FNYS","Strategic","Liberal",0.0650337176178556,1.06719500705099,"Strategic
+Liberal"
+"Exp. 3","FVYN","FPF","Conservative",-0.198746126737087,0.819757981551366,"FPF
+Conservative"
+"Exp. 3","FVYN","FPF","Liberal",-0.198306331207221,0.820118586737686,"FPF
+Liberal"
+"Exp. 3","FVYN","Strategic","Conservative",-0.00733961326556587,0.992687255919216,"Strategic
+Conservative"
+"Exp. 3","FVYN","Strategic","Liberal",0.0395825232067126,1.04037635053517,"Strategic
+Liberal"
+"Exp. 3","FYQK","FPF","Conservative",0.10954401907739,1.11576918498427,"FPF
+Conservative"
+"Exp. 3","FYQK","FPF","Liberal",0.0199465999593454,1.02014686268828,"FPF
+Liberal"
+"Exp. 3","FYQK","Strategic","Conservative",0.0232988096033755,1.02357234710289,"Strategic
+Conservative"
+"Exp. 3","FYQK","Strategic","Liberal",0.0237804046885118,1.02406541323412,"Strategic
+Liberal"
+"Exp. 3","GBXV","FPF","Conservative",-0.0326934716844518,0.967835183013347,"FPF
+Conservative"
+"Exp. 3","GBXV","FPF","Liberal",-0.0559785868413642,0.945559383086687,"FPF
+Liberal"
+"Exp. 3","GBXV","Strategic","Conservative",-0.0323529340864414,0.968164823406129,"Strategic
+Conservative"
+"Exp. 3","GBXV","Strategic","Liberal",-0.0888284000657957,0.915002574484972,"Strategic
+Liberal"
+"Exp. 3","GFKQ","FPF","Conservative",0.0278279511568605,1.02821876535343,"FPF
+Conservative"
+"Exp. 3","GFKQ","FPF","Liberal",0.0527671579170342,1.05418415810541,"FPF
+Liberal"
+"Exp. 3","GFKQ","Strategic","Conservative",-2.65611023034284e-07,0.999999734389012,"Strategic
+Conservative"
+"Exp. 3","GFKQ","Strategic","Liberal",-6.52707379463265e-08,0.999999934729264,"Strategic
+Liberal"
+"Exp. 3","GFLT","FPF","Conservative",0.04286124712639,1.0437930555165,"FPF
+Conservative"
+"Exp. 3","GFLT","FPF","Liberal",-0.0137400709605049,0.986353892965183,"FPF
+Liberal"
+"Exp. 3","GFLT","Strategic","Conservative",0.0850201565680071,1.08873901171916,"Strategic
+Conservative"
+"Exp. 3","GFLT","Strategic","Liberal",0.0437811240564727,1.04475365841854,"Strategic
+Liberal"
+"Exp. 3","GHQC","FPF","Conservative",0.013725089691462,1.01381971113534,"FPF
+Conservative"
+"Exp. 3","GHQC","FPF","Liberal",0.00855654434014681,1.00859325619985,"FPF
+Liberal"
+"Exp. 3","GHQC","Strategic","Conservative",0.0674791882930519,1.06980799483574,"Strategic
+Conservative"
+"Exp. 3","GHQC","Strategic","Liberal",-0.0275266534360529,0.97284875244588,"Strategic
+Liberal"
+"Exp. 3","GLRP","FPF","Conservative",-0.0789296937790293,0.924104892484003,"FPF
+Conservative"
+"Exp. 3","GLRP","FPF","Liberal",-0.138573200877551,0.870599520287682,"FPF
+Liberal"
+"Exp. 3","GLRP","Strategic","Conservative",-0.162946402193214,0.849636725859297,"Strategic
+Conservative"
+"Exp. 3","GLRP","Strategic","Liberal",0.203261934968948,1.22539339959617,"Strategic
+Liberal"
+"Exp. 3","GLXR","FPF","Conservative",-0.11388711638269,0.892358682873148,"FPF
+Conservative"
+"Exp. 3","GLXR","FPF","Liberal",-0.129282147254879,0.878726000437077,"FPF
+Liberal"
+"Exp. 3","GLXR","Strategic","Conservative",0.000310933732798429,1.0003109820777,"Strategic
+Conservative"
+"Exp. 3","GLXR","Strategic","Liberal",0.0201447355858002,1.02034901015164,"Strategic
+Liberal"
+"Exp. 3","GQVT","FPF","Conservative",0.0940752094988119,1.09864237115214,"FPF
+Conservative"
+"Exp. 3","GQVT","FPF","Liberal",-0.08096896441927,0.922222312705504,"FPF
+Liberal"
+"Exp. 3","GQVT","Strategic","Conservative",0.0301738600128261,1.03063370436684,"Strategic
+Conservative"
+"Exp. 3","GQVT","Strategic","Liberal",-0.224595406957952,0.798839358231032,"Strategic
+Liberal"
+"Exp. 3","GVLB","FPF","Conservative",0.0989450337406057,1.10400561483209,"FPF
+Conservative"
+"Exp. 3","GVLB","FPF","Liberal",-0.147037484864275,0.863261617565253,"FPF
+Liberal"
+"Exp. 3","GVLB","Strategic","Conservative",0.0160910861558582,1.01622124487728,"Strategic
+Conservative"
+"Exp. 3","GVLB","Strategic","Liberal",0.0426117273744082,1.0435326410228,"Strategic
+Liberal"
+"Exp. 3","GXFY","FPF","Conservative",2.73525286414417e-05,1.00002735290273,"FPF
+Conservative"
+"Exp. 3","GXFY","FPF","Liberal",-3.58100765810686e-05,0.999964190564592,"FPF
+Liberal"
+"Exp. 3","GXFY","Strategic","Conservative",-3.0158305571964e-05,0.999969842149185,"Strategic
+Conservative"
+"Exp. 3","GXFY","Strategic","Liberal",2.73113649905074e-05,1.00002731173795,"Strategic
+Liberal"
+"Exp. 3","HCVB","FPF","Conservative",0.00744141259866476,1.00746916871492,"FPF
+Conservative"
+"Exp. 3","HCVB","FPF","Liberal",0.0224915260197267,1.02274636739518,"FPF
+Liberal"
+"Exp. 3","HCVB","Strategic","Conservative",-0.00804369426898055,0.991988569674711,"Strategic
+Conservative"
+"Exp. 3","HCVB","Strategic","Liberal",0.100820549142884,1.10607813728328,"Strategic
+Liberal"
+"Exp. 3","HCXG","FPF","Conservative",0.0572509206347028,1.05892148231327,"FPF
+Conservative"
+"Exp. 3","HCXG","FPF","Liberal",-0.0707307247651197,0.931712745520164,"FPF
+Liberal"
+"Exp. 3","HCXG","Strategic","Conservative",0.0501494745139488,1.05142824635685,"Strategic
+Conservative"
+"Exp. 3","HCXG","Strategic","Liberal",0.0077346892634319,1.00776467924363,"Strategic
+Liberal"
+"Exp. 3","HRZP","FPF","Conservative",0.259554964081049,1.29635303460681,"FPF
+Conservative"
+"Exp. 3","HRZP","FPF","Liberal",0.0423954200161039,1.04330694164501,"FPF
+Liberal"
+"Exp. 3","HRZP","Strategic","Conservative",0.0598590856838693,1.06168692911643,"Strategic
+Conservative"
+"Exp. 3","HRZP","Strategic","Liberal",0.0728527762700192,1.07557217551017,"Strategic
+Liberal"
+"Exp. 3","KBGR","FPF","Conservative",0.00441932671963858,1.00442910634511,"FPF
+Conservative"
+"Exp. 3","KBGR","FPF","Liberal",-0.161662017783307,0.850728687122974,"FPF
+Liberal"
+"Exp. 3","KBGR","Strategic","Conservative",-0.0175856401652398,0.982568084768637,"Strategic
+Conservative"
+"Exp. 3","KBGR","Strategic","Liberal",-0.0419561732583108,0.958911805631575,"Strategic
+Liberal"
+"Exp. 3","KFHT","FPF","Conservative",0.0923618761967861,1.09676164220847,"FPF
+Conservative"
+"Exp. 3","KFHT","FPF","Liberal",-0.0525957619767871,0.948763461240861,"FPF
+Liberal"
+"Exp. 3","KFHT","Strategic","Conservative",-0.119279350999205,0.8875598254034,"Strategic
+Conservative"
+"Exp. 3","KFHT","Strategic","Liberal",-0.121962928496844,0.885181182891399,"Strategic
+Liberal"
+"Exp. 3","KFTZ","FPF","Conservative",0.16666435445372,1.18135768131196,"FPF
+Conservative"
+"Exp. 3","KFTZ","FPF","Liberal",-0.104663434235999,0.900627591995591,"FPF
+Liberal"
+"Exp. 3","KFTZ","Strategic","Conservative",-0.181756621872055,0.833804245439739,"Strategic
+Conservative"
+"Exp. 3","KFTZ","Strategic","Liberal",-0.0734173917306623,0.929212903290861,"Strategic
+Liberal"
+"Exp. 3","KTBH","FPF","Conservative",-0.202528623531518,0.816663106481391,"FPF
+Conservative"
+"Exp. 3","KTBH","FPF","Liberal",0.000360040339259335,1.00036010516156,"FPF
+Liberal"
+"Exp. 3","KTBH","Strategic","Conservative",-0.076119677316861,0.92670529431953,"Strategic
+Conservative"
+"Exp. 3","KTBH","Strategic","Liberal",0.066321701517263,1.068570422604,"Strategic
+Liberal"
+"Exp. 3","KXZM","FPF","Conservative",0.0195563623991143,1.01974884073212,"FPF
+Conservative"
+"Exp. 3","KXZM","FPF","Liberal",0.155392059268349,1.16811584198339,"FPF
+Liberal"
+"Exp. 3","KXZM","Strategic","Conservative",-0.00199336613712389,0.998008619297702,"Strategic
+Conservative"
+"Exp. 3","KXZM","Strategic","Liberal",-0.0121690998553299,0.987904644204271,"Strategic
+Liberal"
+"Exp. 3","LNDP","FPF","Conservative",0.119404146423038,1.12682522866168,"FPF
+Conservative"
+"Exp. 3","LNDP","FPF","Liberal",0.443906439420913,1.55878463800582,"FPF
+Liberal"
+"Exp. 3","LNDP","Strategic","Conservative",-0.0410881896165623,0.959744486717245,"Strategic
+Conservative"
+"Exp. 3","LNDP","Strategic","Liberal",0.239176619199163,1.27020285898516,"Strategic
+Liberal"
+"Exp. 3","LTZX","FPF","Conservative",0.000747284666965801,1.00074756395372,"FPF
+Conservative"
+"Exp. 3","LTZX","FPF","Liberal",-0.000197546773472021,0.999802472737607,"FPF
+Liberal"
+"Exp. 3","LTZX","Strategic","Conservative",-1.7714470158885e-08,0.99999998228553,"Strategic
+Conservative"
+"Exp. 3","LTZX","Strategic","Liberal",2.39534248150375e-05,1.0000239537117,"Strategic
+Liberal"
+"Exp. 3","LZPK","FPF","Conservative",0.0477437764153731,1.04890186749464,"FPF
+Conservative"
+"Exp. 3","LZPK","FPF","Liberal",-0.161779696030336,0.850628580752663,"FPF
+Liberal"
+"Exp. 3","LZPK","Strategic","Conservative",0.223852995533999,1.25088711991858,"Strategic
+Conservative"
+"Exp. 3","LZPK","Strategic","Liberal",0.0112034219794383,1.01126641533873,"Strategic
+Liberal"
+"Exp. 3","MDBT","FPF","Conservative",-0.17211861245213,0.84187930987676,"FPF
+Conservative"
+"Exp. 3","MDBT","FPF","Liberal",0.00142110205026756,1.00142211229428,"FPF
+Liberal"
+"Exp. 3","MDBT","Strategic","Conservative",-0.15281631920029,0.858287358241901,"Strategic
+Conservative"
+"Exp. 3","MDBT","Strategic","Liberal",-0.230442584696547,0.794182031895598,"Strategic
+Liberal"
+"Exp. 3","MHKL","FPF","Conservative",0.477827871767468,1.61256789103265,"FPF
+Conservative"
+"Exp. 3","MHKL","FPF","Liberal",-0.028144062869599,0.972248291832804,"FPF
+Liberal"
+"Exp. 3","MHKL","Strategic","Conservative",0.0749073185796989,1.07778425567989,"Strategic
+Conservative"
+"Exp. 3","MHKL","Strategic","Liberal",0.102698610443459,1.10815737168202,"Strategic
+Liberal"
+"Exp. 3","MHVX","FPF","Conservative",0.000418642704410023,1.0004187303475,"FPF
+Conservative"
+"Exp. 3","MHVX","FPF","Liberal",-0.0263411055463102,0.974002795182677,"FPF
+Liberal"
+"Exp. 3","MHVX","Strategic","Conservative",-0.067374039091089,0.934845467184877,"Strategic
+Conservative"
+"Exp. 3","MHVX","Strategic","Liberal",0.0149699381492651,1.01508254889697,"Strategic
+Liberal"
+"Exp. 3","MXGP","FPF","Conservative",-0.447915657247278,0.638958573284247,"FPF
+Conservative"
+"Exp. 3","MXGP","FPF","Liberal",-0.0544166475521148,0.947037443457234,"FPF
+Liberal"
+"Exp. 3","MXGP","Strategic","Conservative",-0.00469097342286327,0.995320012008795,"Strategic
+Conservative"
+"Exp. 3","MXGP","Strategic","Liberal",-0.00652309851338101,0.993498130708543,"Strategic
+Liberal"
+"Exp. 3","NDRL","FPF","Conservative",-0.0285698248255676,0.971834433607182,"FPF
+Conservative"
+"Exp. 3","NDRL","FPF","Liberal",0.0306871336583739,1.03116283726888,"FPF
+Liberal"
+"Exp. 3","NDRL","Strategic","Conservative",-0.0485368539967186,0.952622230722328,"Strategic
+Conservative"
+"Exp. 3","NDRL","Strategic","Liberal",-0.14347699800321,0.866340727524693,"Strategic
+Liberal"
+"Exp. 3","NPKB","FPF","Conservative",-0.0245390505276608,0.975759584247773,"FPF
+Conservative"
+"Exp. 3","NPKB","FPF","Liberal",0.0360862859294654,1.03674529916337,"FPF
+Liberal"
+"Exp. 3","NPKB","Strategic","Conservative",-0.00851407750403912,0.991522064608849,"Strategic
+Conservative"
+"Exp. 3","NSVX","FPF","Conservative",1.79884271452526e-05,1.00001798858894,"FPF
+Conservative"
+"Exp. 3","NSVX","FPF","Liberal",0.00224356696468165,1.0022460856443,"FPF
+Liberal"
+"Exp. 3","NSVX","Strategic","Conservative",0.0421763687221852,1.04307842893841,"Strategic
+Conservative"
+"Exp. 3","NSVX","Strategic","Liberal",5.20236291343058e-05,1.00005202498239,"Strategic
+Liberal"
+"Exp. 3","NVPY","FPF","Conservative",-0.0740296257095047,0.928644181690996,"FPF
+Conservative"
+"Exp. 3","NVPY","FPF","Liberal",0.0526599583730031,1.05407115610132,"FPF
+Liberal"
+"Exp. 3","NVPY","Strategic","Conservative",0.0161149049975062,1.01624545037847,"Strategic
+Conservative"
+"Exp. 3","NVPY","Strategic","Liberal",-0.103279491646412,0.901874871760229,"Strategic
+Liberal"
+"Exp. 3","NVQM","FPF","Conservative",-0.0513412066264851,0.949954484463396,"FPF
+Conservative"
+"Exp. 3","NVQM","FPF","Liberal",0.0352285449160576,1.03585642146775,"FPF
+Liberal"
+"Exp. 3","NVQM","Strategic","Conservative",-0.0414966865622698,0.959352514091023,"Strategic
+Conservative"
+"Exp. 3","NVQM","Strategic","Liberal",-0.0223453161232779,0.977902491243155,"Strategic
+Liberal"
+"Exp. 3","NXZB","FPF","Conservative",0.0964503866470116,1.1012549428382,"FPF
+Conservative"
+"Exp. 3","NXZB","FPF","Liberal",0.0813361280527312,1.08473544530876,"FPF
+Liberal"
+"Exp. 3","NXZB","Strategic","Conservative",0.00726938117984225,1.00729586727148,"Strategic
+Conservative"
+"Exp. 3","NXZB","Strategic","Liberal",0.0765017844731855,1.0795041166816,"Strategic
+Liberal"
+"Exp. 3","NYXL","FPF","Conservative",0.0279509937112203,1.02834528780042,"FPF
+Conservative"
+"Exp. 3","NYXL","FPF","Liberal",6.12332579555977e-05,1.00006123513275,"FPF
+Liberal"
+"Exp. 3","NYXL","Strategic","Conservative",-0.0458507244992328,0.955184537199087,"Strategic
+Conservative"
+"Exp. 3","NYXL","Strategic","Liberal",4.5130515929015e-06,1.00000451306178,"Strategic
+Liberal"
+"Exp. 3","PHYS","FPF","Conservative",-0.0730645012342601,0.929540871558605,"FPF
+Conservative"
+"Exp. 3","PHYS","FPF","Liberal",-0.0355557476280464,0.965068932426469,"FPF
+Liberal"
+"Exp. 3","PHYS","Strategic","Conservative",0.0348277287797078,1.03544131669498,"Strategic
+Conservative"
+"Exp. 3","PHYS","Strategic","Liberal",0.0451567951039915,1.0461918848146,"Strategic
+Liberal"
+"Exp. 3","PNCX","FPF","Conservative",-0.361110519192658,0.696901973167128,"FPF
+Conservative"
+"Exp. 3","PNCX","FPF","Liberal",0.036130212595368,1.036790840928,"FPF
+Liberal"
+"Exp. 3","PNCX","Strategic","Conservative",-0.0307670125152878,0.969701475066433,"Strategic
+Conservative"
+"Exp. 3","PNCX","Strategic","Liberal",-0.0301512804968896,0.970298735170134,"Strategic
+Liberal"
+"Exp. 3","PYTC","FPF","Conservative",-5.9808986990903e-05,0.999940192801531,"FPF
+Conservative"
+"Exp. 3","PYTC","FPF","Liberal",-0.152928934006473,0.858190707819639,"FPF
+Liberal"
+"Exp. 3","PYTC","Strategic","Conservative",0.0122948241123378,1.01237071616989,"Strategic
+Conservative"
+"Exp. 3","PYTC","Strategic","Liberal",-0.0768517335595699,0.926027142176712,"Strategic
+Liberal"
+"Exp. 3","PZWH","FPF","Conservative",0.0177498859453975,1.0179083513635,"FPF
+Conservative"
+"Exp. 3","PZWH","FPF","Liberal",-0.00577463407329055,0.994242007078454,"FPF
+Liberal"
+"Exp. 3","PZWH","Strategic","Conservative",0.0155966306924398,1.01571889293628,"Strategic
+Conservative"
+"Exp. 3","PZWH","Strategic","Liberal",0.0461356330840895,1.04721643852017,"Strategic
+Liberal"
+"Exp. 3","QDCW","FPF","Conservative",-0.0292761582137558,0.971148236869297,"FPF
+Conservative"
+"Exp. 3","QDCW","FPF","Liberal",0.0249913363188113,1.02530623755959,"FPF
+Liberal"
+"Exp. 3","QDCW","Strategic","Conservative",-0.00296174720094178,0.997042634445456,"Strategic
+Conservative"
+"Exp. 3","QDCW","Strategic","Liberal",0.0220269310203857,1.02227131490935,"Strategic
+Liberal"
+"Exp. 3","QDCZ","FPF","Conservative",-0.0112092811415,0.988853308769429,"FPF
+Conservative"
+"Exp. 3","QDCZ","FPF","Liberal",-0.0398508659597182,0.960932736248216,"FPF
+Liberal"
+"Exp. 3","QDCZ","Strategic","Conservative",-0.0550410530127653,0.946446292684191,"Strategic
+Conservative"
+"Exp. 3","QDCZ","Strategic","Liberal",0.00343603196990026,1.00344194189471,"Strategic
+Liberal"
+"Exp. 3","QHVN","FPF","Conservative",-0.347057874892898,0.706764423158777,"FPF
+Conservative"
+"Exp. 3","QHVN","FPF","Liberal",-0.0366715115886873,0.963992743790029,"FPF
+Liberal"
+"Exp. 3","QHVN","Strategic","Conservative",0.00518126456292432,1.00519471052649,"Strategic
+Conservative"
+"Exp. 3","QHVN","Strategic","Liberal",0.0104886995490087,1.0105438987787,"Strategic
+Liberal"
+"Exp. 3","QKGD","FPF","Conservative",0.000239915527864861,1.0002399443099,"FPF
+Conservative"
+"Exp. 3","QKGD","FPF","Liberal",0.0246274104189976,1.0249331699531,"FPF
+Liberal"
+"Exp. 3","QKGD","Strategic","Conservative",-0.129929295612639,0.878157518314948,"Strategic
+Conservative"
+"Exp. 3","QKGD","Strategic","Liberal",0.00856947171801496,1.00860629475026,"Strategic
+Liberal"
+"Exp. 3","QTGM","FPF","Conservative",-0.0361243933242505,0.964520306133278,"FPF
+Conservative"
+"Exp. 3","QTGM","FPF","Liberal",-0.091243944563073,0.912795012356856,"FPF
+Liberal"
+"Exp. 3","QTGM","Strategic","Conservative",0.00398898482274123,1.00399695141205,"Strategic
+Conservative"
+"Exp. 3","QTGM","Strategic","Liberal",-0.118531357359658,0.888223962861851,"Strategic
+Liberal"
+"Exp. 3","QZKF","FPF","Conservative",0.000271709459838931,1.0002717463762,"FPF
+Conservative"
+"Exp. 3","QZKF","FPF","Liberal",-0.0176658561776456,0.982489270236096,"FPF
+Liberal"
+"Exp. 3","QZKF","Strategic","Conservative",0.303869030440666,1.35509156872159,"Strategic
+Conservative"
+"Exp. 3","QZKF","Strategic","Liberal",0.0202983800942826,1.02050579321791,"Strategic
+Liberal"
+"Exp. 3","RBWH","FPF","Conservative",-0.0584100727707028,0.943263061619371,"FPF
+Conservative"
+"Exp. 3","RBWH","FPF","Liberal",0.0750834867184267,1.07797414365178,"FPF
+Liberal"
+"Exp. 3","RBWH","Strategic","Conservative",0.00268583472884819,1.00268944481425,"Strategic
+Conservative"
+"Exp. 3","RBWH","Strategic","Liberal",-0.117354067492274,0.889270275719208,"Strategic
+Liberal"
+"Exp. 3","RLBQ","FPF","Conservative",0.0420052163741967,1.0428999188928,"FPF
+Conservative"
+"Exp. 3","RLBQ","FPF","Liberal",-1.02897334756627e-06,0.999998971027182,"FPF
+Liberal"
+"Exp. 3","RLBQ","Strategic","Conservative",-9.11138293175251e-06,0.999990888658577,"Strategic
+Conservative"
+"Exp. 3","RLBQ","Strategic","Liberal",0.000129186141542078,1.00012919448643,"Strategic
+Liberal"
+"Exp. 3","RTDV","FPF","Conservative",0.236632012860955,1.26697480154889,"FPF
+Conservative"
+"Exp. 3","RTDV","FPF","Liberal",0.221642333080492,1.24812488503839,"FPF
+Liberal"
+"Exp. 3","RTDV","Strategic","Conservative",-0.0139123248824668,0.986184004271095,"Strategic
+Conservative"
+"Exp. 3","RTDV","Strategic","Liberal",-0.0396705674478475,0.961106006610294,"Strategic
+Liberal"
+"Exp. 3","RYHQ","FPF","Conservative",-0.137368786064889,0.871648714951779,"FPF
+Conservative"
+"Exp. 3","RYHQ","FPF","Liberal",-0.139787496702328,0.869542996521165,"FPF
+Liberal"
+"Exp. 3","RYHQ","Strategic","Conservative",0.00164611713605629,1.00164747273059,"Strategic
+Conservative"
+"Exp. 3","RYHQ","Strategic","Liberal",0.0277386721469675,1.02812697109781,"Strategic
+Liberal"
+"Exp. 3","RZLY","FPF","Conservative",0.121649633520724,1.12935834314756,"FPF
+Conservative"
+"Exp. 3","RZLY","FPF","Liberal",0.0176069611132313,1.01776287737939,"FPF
+Liberal"
+"Exp. 3","RZLY","Strategic","Conservative",-0.0914205872489603,0.912633788034177,"Strategic
+Conservative"
+"Exp. 3","RZLY","Strategic","Liberal",-0.00826069303863894,0.991773332729497,"Strategic
+Liberal"
+"Exp. 3","SDXY","FPF","Conservative",0.0185798094871123,1.01875348811854,"FPF
+Conservative"
+"Exp. 3","SDXY","FPF","Liberal",-0.0288653651862335,0.971547259745989,"FPF
+Liberal"
+"Exp. 3","SDXY","Strategic","Conservative",-0.0622544806487265,0.939643735215346,"Strategic
+Conservative"
+"Exp. 3","SDXY","Strategic","Liberal",0.174189424957452,1.19028101339731,"Strategic
+Liberal"
+"Exp. 3","SGXY","FPF","Conservative",-0.0881160428789538,0.915654615360314,"FPF
+Conservative"
+"Exp. 3","SGXY","FPF","Liberal",-0.029084762674416,0.97133412809868,"FPF
+Liberal"
+"Exp. 3","SGXY","Strategic","Conservative",-0.00417734369794575,0.99583136926567,"Strategic
+Conservative"
+"Exp. 3","SGXY","Strategic","Liberal",0.0449031803384477,1.04592658874795,"Strategic
+Liberal"
+"Exp. 3","SKGV","FPF","Conservative",-0.0392630175022431,0.961497785140245,"FPF
+Conservative"
+"Exp. 3","SKGV","FPF","Liberal",-0.0295415680911816,0.970890518736769,"FPF
+Liberal"
+"Exp. 3","SKGV","Strategic","Conservative",-0.0362020468973935,0.964445410593129,"Strategic
+Conservative"
+"Exp. 3","SKGV","Strategic","Liberal",-0.0964801699039709,0.908027903701745,"Strategic
+Liberal"
+"Exp. 3","SLPW","FPF","Conservative",9.64155274671217e-07,1.00000096415574,"FPF
+Conservative"
+"Exp. 3","SLPW","FPF","Liberal",1.52568940579456e-06,1.00000152569057,"FPF
+Liberal"
+"Exp. 3","SLPW","Strategic","Conservative",0.205229659145892,1.22780700969551,"Strategic
+Conservative"
+"Exp. 3","SLPW","Strategic","Liberal",-0.0922855918422875,0.911844696948411,"Strategic
+Liberal"
+"Exp. 3","SVNC","FPF","Conservative",-0.0389790172687511,0.961770889514744,"FPF
+Conservative"
+"Exp. 3","SVNC","FPF","Liberal",-0.0453718322324518,0.955642077234749,"FPF
+Liberal"
+"Exp. 3","SVNC","Strategic","Conservative",-0.0715792593818705,0.930922490329581,"Strategic
+Conservative"
+"Exp. 3","SVNC","Strategic","Liberal",0.0298838354707385,1.03033483863996,"Strategic
+Liberal"
+"Exp. 3","SVNG","FPF","Conservative",6.45242854327694e-05,1.00006452636717,"FPF
+Conservative"
+"Exp. 3","SVNG","FPF","Liberal",-0.00310171366651747,0.996903091677766,"FPF
+Liberal"
+"Exp. 3","SVNG","Strategic","Conservative",2.99909934794651e-05,1.00002999144321,"Strategic
+Conservative"
+"Exp. 3","SVNG","Strategic","Liberal",0.00111381019242079,1.00111443070935,"Strategic
+Liberal"
+"Exp. 3","SVZQ","FPF","Conservative",0.142478703715712,1.15312852334302,"FPF
+Conservative"
+"Exp. 3","SVZQ","FPF","Liberal",-0.289051854751314,0.748973366568025,"FPF
+Liberal"
+"Exp. 3","SVZQ","Strategic","Conservative",0.00294091102336043,1.00294523974461,"Strategic
+Conservative"
+"Exp. 3","SVZQ","Strategic","Liberal",-1.73210596724641e-05,0.999982679090336,"Strategic
+Liberal"
+"Exp. 3","SWKN","FPF","Conservative",-0.0565666500840276,0.9450034978336,"FPF
+Conservative"
+"Exp. 3","SWKN","FPF","Liberal",-0.0304398794550286,0.970018748369973,"FPF
+Liberal"
+"Exp. 3","SWKN","Strategic","Conservative",-0.0166948514270695,0.98344373530495,"Strategic
+Conservative"
+"Exp. 3","SWKN","Strategic","Liberal",-0.0166869610558911,0.983451495071669,"Strategic
+Liberal"
+"Exp. 3","SXWH","FPF","Conservative",0.00368195399928663,1.00368874071882,"FPF
+Conservative"
+"Exp. 3","SXWH","FPF","Liberal",-0.21133034171328,0.809506608907348,"FPF
+Liberal"
+"Exp. 3","SXWH","Strategic","Conservative",-0.0278665827489326,0.972518108838836,"Strategic
+Conservative"
+"Exp. 3","SXWH","Strategic","Liberal",-0.0663146542615304,0.935836353062856,"Strategic
+Liberal"
+"Exp. 3","THKY","FPF","Conservative",-0.077712042009267,0.925230815793922,"FPF
+Conservative"
+"Exp. 3","THKY","FPF","Liberal",-0.0833478666580317,0.920031043422273,"FPF
+Liberal"
+"Exp. 3","THKY","Strategic","Conservative",-0.128570247630559,0.879351787869158,"Strategic
+Conservative"
+"Exp. 3","THKY","Strategic","Liberal",-0.105350923467845,0.900008633012388,"Strategic
+Liberal"
+"Exp. 3","TKQB","FPF","Conservative",-0.0794776484994412,0.923598663553942,"FPF
+Conservative"
+"Exp. 3","TKQB","FPF","Liberal",-0.00110238719535756,0.998898220210187,"FPF
+Liberal"
+"Exp. 3","TKQB","Strategic","Conservative",-0.0672970092729859,0.934917480934737,"Strategic
+Conservative"
+"Exp. 3","TKQB","Strategic","Liberal",0.155137417736891,1.16781842904492,"Strategic
+Liberal"
+"Exp. 3","TQCL","FPF","Conservative",-0.00999045199075428,0.990059286799263,"FPF
+Conservative"
+"Exp. 3","TQCL","FPF","Liberal",-0.0366635410779559,0.964000427335159,"FPF
+Liberal"
+"Exp. 3","TQCL","Strategic","Conservative",0.053655832033009,1.05512140067011,"Strategic
+Conservative"
+"Exp. 3","TQCL","Strategic","Liberal",0.0155774348202504,1.01569939551337,"Strategic
+Liberal"
+"Exp. 3","TXYK","FPF","Conservative",3.42205778457158e-05,1.00003422116338,"FPF
+Conservative"
+"Exp. 3","TXYK","FPF","Liberal",1.91350447831331e-07,1.00000019135047,"FPF
+Liberal"
+"Exp. 3","TXYK","Strategic","Conservative",-1.90842213854397e-08,0.999999980915779,"Strategic
+Conservative"
+"Exp. 3","TXYK","Strategic","Liberal",-0.0229232853093495,0.977337457038143,"Strategic
+Liberal"
+"Exp. 3","VFTX","FPF","Conservative",-0.0860609561486089,0.917538299914526,"FPF
+Conservative"
+"Exp. 3","VFTX","FPF","Liberal",0.0473403623073152,1.04847881102254,"FPF
+Liberal"
+"Exp. 3","VFTX","Strategic","Conservative",-0.114586109072609,0.891735148625363,"Strategic
+Conservative"
+"Exp. 3","VFTX","Strategic","Liberal",0.1841047647289,1.20214175855482,"Strategic
+Liberal"
+"Exp. 3","VFZY","FPF","Conservative",0.0355819105154162,1.03622252217286,"FPF
+Conservative"
+"Exp. 3","VFZY","FPF","Liberal",-0.0602815410450124,0.941499425534458,"FPF
+Liberal"
+"Exp. 3","VFZY","Strategic","Conservative",0.103496279583218,1.10904166726016,"Strategic
+Conservative"
+"Exp. 3","VFZY","Strategic","Liberal",0.00298308407061562,1.00298753789351,"Strategic
+Liberal"
+"Exp. 3","VLDM","FPF","Conservative",0.0143630952822691,1.01446674016123,"FPF
+Conservative"
+"Exp. 3","VLDM","FPF","Liberal",-0.0213897825995141,0.978837356432893,"FPF
+Liberal"
+"Exp. 3","VLDM","Strategic","Conservative",0.00655954732883605,1.00658110827699,"Strategic
+Conservative"
+"Exp. 3","VLDM","Strategic","Liberal",0.0119281920886568,1.01199961667814,"Strategic
+Liberal"
+"Exp. 3","VQZX","FPF","Conservative",0.0415316495632009,1.04240615302881,"FPF
+Conservative"
+"Exp. 3","VQZX","FPF","Liberal",-0.0986274324347049,0.906080221248397,"FPF
+Liberal"
+"Exp. 3","VQZX","Strategic","Conservative",-0.222820481431485,0.800258497660336,"Strategic
+Conservative"
+"Exp. 3","VQZX","Strategic","Liberal",0.0754511690201636,1.07837056854087,"Strategic
+Liberal"
+"Exp. 3","VXLQ","FPF","Conservative",0.125469543860559,1.13368064089905,"FPF
+Conservative"
+"Exp. 3","VXLQ","FPF","Liberal",-0.00716118977731669,0.992864390444168,"FPF
+Liberal"
+"Exp. 3","VXLQ","Strategic","Conservative",0.150676100996584,1.16262002562202,"Strategic
+Conservative"
+"Exp. 3","VXLQ","Strategic","Liberal",0.0932844727338795,1.09777397761835,"Strategic
+Liberal"
+"Exp. 3","VXQF","FPF","Conservative",-0.153476965951606,0.857720520747274,"FPF
+Conservative"
+"Exp. 3","VXQF","FPF","Liberal",0.0506219705752882,1.05192515944753,"FPF
+Liberal"
+"Exp. 3","VXQF","Strategic","Conservative",0.00357378795882572,1.00358018155319,"Strategic
+Conservative"
+"Exp. 3","VXQF","Strategic","Liberal",-0.0924964991602538,0.911652402507841,"Strategic
+Liberal"
+"Exp. 3","VZFR","FPF","Conservative",0.37909598446057,1.46096325878401,"FPF
+Conservative"
+"Exp. 3","VZFR","FPF","Liberal",0.014791738656433,1.01490167781762,"FPF
+Liberal"
+"Exp. 3","VZFR","Strategic","Conservative",-0.0679416905476259,0.934314951382073,"Strategic
+Conservative"
+"Exp. 3","VZFR","Strategic","Liberal",-0.0443028183108282,0.956664218163503,"Strategic
+Liberal"
+"Exp. 3","WNHG","FPF","Conservative",0.0605430043386328,1.06241328496861,"FPF
+Conservative"
+"Exp. 3","WNHG","FPF","Liberal",-0.109870703482939,0.895949971018503,"FPF
+Liberal"
+"Exp. 3","WNHG","Strategic","Conservative",0.219334998342805,1.24524836296,"Strategic
+Conservative"
+"Exp. 3","WNHG","Strategic","Liberal",-0.0391369856078073,0.961618972164156,"Strategic
+Liberal"
+"Exp. 3","WQBF","FPF","Conservative",-1.13103153355387e-07,0.999999886896853,"FPF
+Conservative"
+"Exp. 3","WQBF","FPF","Liberal",-0.176439795453132,0.838249244051961,"FPF
+Liberal"
+"Exp. 3","WQBF","Strategic","Conservative",4.64811581113225e-07,1.00000046481169,"Strategic
+Conservative"
+"Exp. 3","WQBF","Strategic","Liberal",-0.000146050861260495,0.999853959803647,"Strategic
+Liberal"
+"Exp. 3","WQHX","FPF","Conservative",-0.017690303039571,0.982465251750153,"FPF
+Conservative"
+"Exp. 3","WQHX","FPF","Liberal",-0.109225676001669,0.896528069796408,"FPF
+Liberal"
+"Exp. 3","WQHX","Strategic","Conservative",-0.0440911756244512,0.956866710575859,"Strategic
+Conservative"
+"Exp. 3","WQHX","Strategic","Liberal",-0.134081797227643,0.874518528486493,"Strategic
+Liberal"
+"Exp. 3","WVDQ","FPF","Conservative",0.0901739605294852,1.09436464340001,"FPF
+Conservative"
+"Exp. 3","WVDQ","FPF","Liberal",-0.0155040395678901,0.984615529322423,"FPF
+Liberal"
+"Exp. 3","WVDQ","Strategic","Conservative",-0.0691332114363677,0.933202358571256,"Strategic
+Conservative"
+"Exp. 3","WVDQ","Strategic","Liberal",-0.0657876133746162,0.93632970708183,"Strategic
+Liberal"
+"Exp. 3","wvkq","FPF","Conservative",0.0414927473077245,1.04236560186711,"FPF
+Conservative"
+"Exp. 3","wvkq","FPF","Liberal",0.193941439602191,1.21402518707665,"FPF
+Liberal"
+"Exp. 3","wvkq","Strategic","Conservative",0.152507100180924,1.16475073200618,"Strategic
+Conservative"
+"Exp. 3","wvkq","Strategic","Liberal",0.107594399246508,1.11359597840622,"Strategic
+Liberal"
+"Exp. 3","XBQK","FPF","Conservative",-0.0503610926019264,0.950886004599716,"FPF
+Conservative"
+"Exp. 3","XBQK","FPF","Liberal",-0.0807933832621785,0.922384251782574,"FPF
+Liberal"
+"Exp. 3","XBQK","Strategic","Conservative",-0.166610133016662,0.84652958094491,"Strategic
+Conservative"
+"Exp. 3","XBQK","Strategic","Liberal",0.0427012681711563,1.04362608395032,"Strategic
+Liberal"
+"Exp. 3","XLVP","FPF","Conservative",0.282933355075722,1.32701671994127,"FPF
+Conservative"
+"Exp. 3","XLVP","FPF","Liberal",0.0338744020291809,1.03445467316074,"FPF
+Liberal"
+"Exp. 3","XLVP","Strategic","Conservative",0.151690203727569,1.16379963978899,"Strategic
+Conservative"
+"Exp. 3","XLVP","Strategic","Liberal",-0.110424763857721,0.895453698137039,"Strategic
+Liberal"
+"Exp. 3","XVGB","FPF","Conservative",-0.0175492218306917,0.98260386891346,"FPF
+Conservative"
+"Exp. 3","XVGB","FPF","Liberal",0.00860951164990759,1.00864668008612,"FPF
+Liberal"
+"Exp. 3","XVGB","Strategic","Conservative",0.0619013774714032,1.06385741924536,"Strategic
+Conservative"
+"Exp. 3","XVGB","Strategic","Liberal",-0.0645665126396789,0.937473758334048,"Strategic
+Liberal"
+"Exp. 3","YHSR","FPF","Conservative",0.0158740792007061,1.0160007417254,"FPF
+Conservative"
+"Exp. 3","YHSR","FPF","Liberal",-0.0358453658425362,0.964789471355861,"FPF
+Liberal"
+"Exp. 3","YHSR","Strategic","Conservative",-0.158372662839574,0.8535316431671,"Strategic
+Conservative"
+"Exp. 3","YHSR","Strategic","Liberal",0.12354741048559,1.13150364840785,"Strategic
+Liberal"
+"Exp. 3","YKQN","FPF","Conservative",0.0455035191981341,1.04655468764077,"FPF
+Conservative"
+"Exp. 3","YKQN","FPF","Liberal",0.00554724504983311,1.00556265950306,"FPF
+Liberal"
+"Exp. 3","YKQN","Strategic","Conservative",-0.00208215252397745,0.997920013651892,"Strategic
+Conservative"
+"Exp. 3","YKQN","Strategic","Liberal",0.0735008966116554,1.07626950166724,"Strategic
+Liberal"
+"Exp. 3","YTLW","FPF","Conservative",0.040240513795799,1.04106113364864,"FPF
+Conservative"
+"Exp. 3","YTLW","FPF","Liberal",0.00752220554076913,1.00755056840135,"FPF
+Liberal"
+"Exp. 3","YTLW","Strategic","Conservative",-0.00948162062903177,0.990563188203898,"Strategic
+Conservative"
+"Exp. 3","YTLW","Strategic","Liberal",0.07515437794574,1.07805056527062,"Strategic
+Liberal"
+"Exp. 3","YTML","FPF","Conservative",-0.0437295589840095,0.95721279207173,"FPF
+Conservative"
+"Exp. 3","YTML","FPF","Liberal",-0.119194953203457,0.887634736657386,"FPF
+Liberal"
+"Exp. 3","YTML","Strategic","Conservative",-0.0063446727495819,0.993675412186669,"Strategic
+Conservative"
+"Exp. 3","YTML","Strategic","Liberal",0.163744096279517,1.17791284424136,"Strategic
+Liberal"
+"Exp. 3","YZKH","FPF","Conservative",0.000480269377390376,1.00048038472519,"FPF
+Conservative"
+"Exp. 3","YZKH","FPF","Liberal",-0.0135757892353712,0.98651594619514,"FPF
+Liberal"
+"Exp. 3","YZKH","Strategic","Conservative",0.0586952950109522,1.06045206647095,"Strategic
+Conservative"
+"Exp. 3","YZKH","Strategic","Liberal",0.0238267103202233,1.02411283432791,"Strategic
+Liberal"
+"Exp. 3","ZCNG","FPF","Conservative",-0.0212605273795073,0.978963884447777,"FPF
+Conservative"
+"Exp. 3","ZCNG","FPF","Liberal",-0.0684402256196423,0.933849278697227,"FPF
+Liberal"
+"Exp. 3","ZCNG","Strategic","Conservative",0.0220862185325365,1.02233192462903,"Strategic
+Conservative"
+"Exp. 3","ZCNG","Strategic","Liberal",-0.00751983792149077,0.99250836532081,"Strategic
+Liberal"
+"Exp. 3","ZCVF","FPF","Conservative",-0.0207316583532821,0.97948176505749,"FPF
+Conservative"
+"Exp. 3","ZCVF","FPF","Liberal",0.0181082217410927,1.01827316972236,"FPF
+Liberal"
+"Exp. 3","ZCVF","Strategic","Conservative",-0.0792848683377433,0.923776732217148,"Strategic
+Conservative"
+"Exp. 3","ZCVF","Strategic","Liberal",-0.296477479863342,0.743432369274139,"Strategic
+Liberal"
+"Exp. 3","ZNKC","FPF","Conservative",-0.307864623618718,0.735014814919983,"FPF
+Conservative"
+"Exp. 3","ZNKC","FPF","Liberal",0.200385482553469,1.22187367837413,"FPF
+Liberal"
+"Exp. 3","ZNKC","Strategic","Conservative",-0.190317003784252,0.82669702631523,"Strategic
+Conservative"
+"Exp. 3","ZNKC","Strategic","Liberal",-0.0506172688855062,0.950642441355845,"Strategic
+Liberal"
+"Exp. 3","ZRNG","FPF","Conservative",0.0113193058170265,1.01138361156221,"FPF
+Conservative"
+"Exp. 3","ZRNG","FPF","Liberal",0.0676288173827398,1.06996808120864,"FPF
+Liberal"
+"Exp. 3","ZRNG","Strategic","Conservative",-0.131656197917089,0.876642334736455,"Strategic
+Conservative"
+"Exp. 3","ZRNG","Strategic","Liberal",0.199247607217742,1.22048412916895,"Strategic
+Liberal"
+"Exp. 3","ZVPW","FPF","Conservative",0.0671965105706255,1.06950562668671,"FPF
+Conservative"
+"Exp. 3","ZVPW","FPF","Liberal",-0.00757504554035476,0.992453572809754,"FPF
+Liberal"
+"Exp. 3","ZVPW","Strategic","Conservative",0.0518517429746883,1.05321958373535,"Strategic
+Conservative"
+"Exp. 3","ZVPW","Strategic","Liberal",-0.0225630104483185,0.977689630590487,"Strategic
+Liberal"
+"Exp. 3","ZWQY","FPF","Conservative",-0.0726687952551583,0.929908769224153,"FPF
+Conservative"
+"Exp. 3","ZWQY","FPF","Liberal",-0.0257495175959598,0.974579173972478,"FPF
+Liberal"
+"Exp. 3","ZWQY","Strategic","Conservative",0.0041275197359665,1.00413604967735,"Strategic
+Conservative"
+"Exp. 3","ZWQY","Strategic","Liberal",0.0829082848590385,1.08644216078278,"Strategic
+Liberal"
+"Exp. 3","ZXST","FPF","Conservative",-0.0410784528352616,0.959753831584911,"FPF
+Conservative"
+"Exp. 3","ZXST","FPF","Liberal",-0.279451298173276,0.756198555169384,"FPF
+Liberal"
+"Exp. 3","ZXST","Strategic","Conservative",-0.0609114560426084,0.940906547677017,"Strategic
+Conservative"
+"Exp. 3","ZXST","Strategic","Liberal",-0.0465945784479904,0.95447428360452,"Strategic
+Liberal"
