@@ -11,3 +11,5 @@
 
 **Questions and comments:** luna.0x4c@gmail.com 
 
+**Study pre-registration:** https://osf.io/ua8bm 
+
