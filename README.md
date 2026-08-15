@@ -9,5 +9,5 @@
 - `fig1.pdf`: sample procedures  
 - `sessionInfo.txt`: list of R packages and versions  
 
-luna.0x4c@gmail.com 
+**Questions and comments:** luna.0x4c@gmail.com 
 
