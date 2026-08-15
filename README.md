@@ -4,7 +4,7 @@
 
 - `data_clean` folder contains all the trial-by-trial data  
 - `get_sdt.Rmd` contains the main analysis code used to calculate SDT indices, run models, and generate figures/tables   
-- `sdt.R` contains custom SDT-related wrapper functions used in the analysis (sensitivity, criterion, M-ratio, etc.)  
+- `sdt.R` contains several custom SDT-related wrapper functions used in the analysis (sensitivity, criterion, M-ratio, etc.)  
 - `ggsave` folder: all figures except Fig.1  
 - `fig1.pdf`: sample procedures  
 - `sessionInfo.txt`: list of R packages and versions  
@@ -13,5 +13,5 @@
 
 **Study pre-registration:** https://osf.io/ua8bm 
 
-**To do:** upload experiment code & stimuli
+**To do:** upload experiment code & materials (stimuli, survey)
 
