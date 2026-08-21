@@ -8,10 +8,10 @@
   - `survey_sdt.Rmd`: any analysis pertaining to survey data  
 
 - folders:
-  - `data_clean` folder contains all the trial-by-trial data  
-  - `ggsave` folder: all figures except Fig.1  
-  - `materials` folder: experiment code & stimuli, sample procedure (Fig. 1), survey questions   
-  - `stats` folder: subject-level SDT summary statistics  
+  - `data_clean`: all trial-by-trial memory task data  
+  - `ggsave`: all figures except Fig.1  
+  - `materials`: experiment code & stimuli, sample procedure (Fig. 1), survey questions   
+  - `stats`: subject-level SDT summary statistics  
   
 - `sessionInfo.txt`: list of R packages and versions from local R env snapshot   
 
