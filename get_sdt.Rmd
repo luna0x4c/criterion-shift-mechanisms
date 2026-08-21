@@ -112,6 +112,7 @@ sdt_des_raw = sdt_subj %>% group_by(exp,task,cond) %>%
 cshift_subj = sdt_subj %>% select(exp,subj,task,cond,c2) %>% 
   pivot_wider(names_from = cond, values_from = c2) %>% 
   mutate(cshift = Conservative-Liberal) 
+#write.csv(cshift_subj,"./stats/cshift.csv",row.names=FALSE)
 
 cshift_des = cshift_subj %>% 
   group_by(exp,task) %>% 
@@ -384,41 +385,31 @@ confint(mratio.lm)
 
 ```{r plot mratio by cond}
 
-get_se = function(x) {
-  se = sd(x, na.rm = TRUE) / sqrt(104)
-  return(se)
-}
-
-# verify SEM
-type2sdt_df %>% group_by(taskcond) %>% 
-  summarise(sd = sd(log_mratio),
-            se = sd/sqrt(104),
-            se2 = get_se(log_mratio))
-
-# ggplot(type2sdt_df, aes(x = cond, y = log_mratio, color = cond, group = subj)) +
-#   geom_point(size = 1, position = position_jitter(width = 0.1), alpha = 0.6, shape = 16) +
-#   geom_line(aes(group = subj), color = "lightgray", linewidth = 0.2, alpha = 0.4) +
-#   stat_summary(aes(group = cond), fun = mean, geom = "point", size = 1, color = "black") +
-#   stat_summary(aes(group = cond), fun.data = mean_se, geom = "errorbar", width = 0.15, color = "black", linewidth = 0.6) +
-#   facet_grid(rows = vars(exp), cols = vars(task)) +
-#   scale_color_manual(values = c("Conservative" = "#0072B2", "Liberal" = "#E69F00")) +
-#   labs(x = NULL, y = "log(M-ratio)", color = "Condition") +
-#   theme_bw() +
-#   theme(legend.position = "bottom")
+# morey corrected within subjects SEM
+type2sdt_df_summary = type2sdt_df %>% filter(!is.na(log_mratio)) %>% 
+  group_by(subj) %>% 
+  mutate(subj_mean = mean(log_mratio)) %>% ungroup() %>% 
+  mutate(grand_mean = mean(log_mratio),
+         log_mratio_norm = log_mratio - subj_mean + grand_mean) %>% 
+  group_by(taskcond) %>% 
+  summarise(mean = mean(log_mratio),
+            n = sum(!is.na(log_mratio)),
+            sd_raw = sd(log_mratio),
+            se_raw = sd_raw/sqrt(104),
+            sd_adj = sd(log_mratio_norm) * sqrt(4/3),  # ncond/(ncond-1) <- task x cond = 4 unique conds
+            se_adj = sd_adj/sqrt(104))
 
 ggplot(type2sdt_df, aes(x = taskcond, y = log_mratio, group = subj)) +
   geom_point(size = 1, position = position_jitter(width = 0.1), alpha = 0.6, shape = 16) +
   geom_line(aes(group = subj), color = "lightgray", linewidth = 0.2, alpha = 0.4) +
-  # stat_summary(aes(group = cond), fun = mean, geom = "point", size = 1, color = "black") +
-  # stat_summary(aes(group = cond), fun.data = mean_se, geom = "errorbar", width = 0.15, color = "black", linewidth = 0.6) +
-  stat_summary(aes(group = taskcond), fun = function(x) mean(x,na.rm=TRUE),
-               fun.min = function(x) mean(x,na.rm=TRUE) - get_se(x),
-               fun.max = function(x) mean(x,na.rm=TRUE) + get_se(x),
-               geom = "pointrange", size=0.3, fatten=1.5,position = position_nudge(x =-0.2),color="blue",
-               linewidth = 0.5) +
+  geom_pointrange(data = type2sdt_df_summary, aes(x=taskcond, y=mean,
+                                                  ymin = mean-sd_adj, ymax = mean+sd_adj),
+                  size=0.1, fatten=1.5,
+                  inherit.aes = FALSE, position=position_nudge(x =-0.2),color="blue",linewidth = 0.5) +
   facet_grid(cols = vars(exp)) +
-  labs(x = NULL, y = "log(M-ratio)") +
-  theme_bw() 
+  labs(x = NULL, y = "log(M-ratio)", caption="Error bars represent within-subject normalized SD (Morey, 2008)") +
+  theme_bw() +
+  theme(plot.caption = element_text(size = 8))
 
 #ggsave("./ggsave/mratio_taskcond.pdf",width=4,height=4)
 
@@ -460,7 +451,7 @@ plot_dtd_corr = function(df,col) {
     ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
     #facet_grid(cols = vars(task), scales = "free") +
     ggh4x::facet_nested(cols=vars(exp,task),scales="free_x") +
-    labs(x = "Mean DTD", y = "Criterion shifting (\u0394c)") +
+    labs(x = "Mean DTD", y = "Criterion shifting (\u0394c)") +  # delta
     theme_bw()
   
   return(p)
@@ -909,7 +900,9 @@ fpf_aware %>% count(exp,conf_strategy)
 fpf_aware %>% count(exp,self_bias)
 
 
-survey_raw %>% filter(exp=="FPF03") %>% select(exp,subj,self_bias) 
+survey_raw %>% filter(exp=="FPF03") %>% select(exp,subj,self_bias)
+
+
 ```
 
 

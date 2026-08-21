@@ -1,0 +1,241 @@
+---
+title: "Analyze survey data with SDT"
+output: html_document
+date: "2026-08-15"
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(foreign)
+library(openxlsx)
+library(readxl)
+library(tidyverse)
+library(data.table) 
+library(dplyr)
+library(stringr)
+library(stringi)
+library(vctrs)
+library(pander)
+library(ggplot2)
+library(ggrepel)
+library(ggdist)
+library(ggforce)
+#library(gghalves)
+library(ggpubr)
+library(ggpmisc)  # put corr labels on scatterplot
+library(ggh4x)    # nested facets
+library(lm.beta)
+library(emmeans)
+library(lmerTest)
+library(cocor)
+library(grid)
+library(gridExtra)
+library(cowplot)
+library(patchwork)
+
+source("sdt.R")
+
+set.seed(5183)
+
+select=dplyr::select
+recode=dplyr::recode
+rename=dplyr::rename
+
+`%nin%` = Negate(`%in%`)
+
+today = Sys.Date() 
+
+# RStudio menu >> session >> set working directory >> to source file location 
+
+# delta = \u0394
+
+```
+
+# load trials 
+
+```{r load raw survey data + SDT subj data}
+sdt_type1 = read.csv("./stats/sdt_type1.csv")
+sdt_cshift = read.csv("./stats/cshift.csv")
+
+survey_raw = read.csv("./data_clean/all_survey_clean.csv") %>% 
+  select(-comments,-contains("text"),-contains("disclose"))
+
+survey = survey_raw %>% 
+  mutate(exp = factor(exp, labels=c("Exp. 1", "Exp. 2", "Exp. 3"))) %>% 
+  mutate(used_feedback = factor(used_feedback, 
+                                levels = c("No, the feedback did not influence my answers at all",
+                                           "Yes, sometimes",
+                                           "Yes, throughout the entire study"),
+                                labels = c("No","Sometimes","Always")),
+         used_percentage = factor(used_percentage, 
+                                  levels = c("No, the percentages did not influence my answers at all",
+                                             "Yes, sometimes",
+                                             "Yes, all the time"),
+                                  labels = c("No","Sometimes","Always")),
+         fpf_aware = factor(fpf_aware,levels=c("I'm not sure",
+                                               "I did not pay attention to the feedback",
+                                               "No","Yes","Yes (please elaborate)"),
+                            labels=c("Don't know","Don't know","No","Yes","Yes")))
+
+survey_raw %>% count(exp,fpf_aware)
+```
+
+
+# plot cshift by self report
+```{r plot cshift by prob/feed usage level}
+survey_df = survey %>% select(exp,subj,used_feedback,used_percentage) %>% 
+  pivot_longer(cols=c(used_feedback,used_percentage),names_to="task") %>% 
+  mutate(task = case_when(task=="used_feedback" ~ "FPF",
+                          task=="used_percentage" ~ "Strategic")) %>% 
+  rename(use_info = value) %>% 
+  merge(sdt_type1) %>% merge(sdt_cshift) %>% 
+  mutate(info_type = factor(task, levels=c("Strategic","FPF"),
+                            labels=c("Base rate (Strategic)","Feedback (FPF)")))
+
+use_info_df = survey_df %>% select(exp,subj,task,info_type,use_info,cshift) %>% unique() 
+use_info_df_summary = use_info_df %>% group_by(exp,info_type,use_info) %>% filter(!is.na(cshift)) %>% 
+  summarise(n = n(),
+            mean = mean(cshift),
+            sd = sd(cshift),
+            se = sd/sqrt(n)) %>% ungroup()
+
+p_use_info = ggplot(use_info_df,aes(x=use_info,y=cshift)) +
+  facet_grid(cols=vars(info_type),rows=vars(exp)) +
+  geom_jitter(width=0.1, height=0, size=0.7, alpha=0.7, shape=16) +
+  geom_pointrange(data = use_info_df_summary, aes(x=use_info, y=mean, ymin = mean-sd, ymax = mean+sd),
+                  size=0.1, fatten=1.5, inherit.aes = FALSE, position=position_nudge(x =-0.2),color="blue",linewidth = 0.5) +
+  geom_text(data = use_info_df_summary, aes(x=use_info, y=2.75, label=paste0("n=", n)),size=3) +
+  labs(x = "Used information",y = "Criterion shifting (\u0394c)") +
+  theme_bw() 
+p_use_info
+```
+
+
+```{r plot cshift by FPF aware}
+fpf_aware_df = survey %>% select(exp,subj,fpf_aware) %>% 
+  merge(sdt_type1 %>% filter(task=="FPF")) %>% merge(sdt_cshift %>% filter(task=="FPF")) %>% 
+  select(exp,task,subj,fpf_aware,cshift) %>% unique() 
+
+fpf_aware_df_summary = fpf_aware_df %>% group_by(exp,task,fpf_aware) %>% filter(!is.na(cshift)) %>% 
+  summarise(n = n(),
+            mean = mean(cshift),
+            sd = sd(cshift),
+            se = sd/sqrt(n)) %>% ungroup()
+
+p_fpf_aware = ggplot(fpf_aware_df,aes(x=fpf_aware,y=cshift)) +
+  facet_grid(cols=vars(task),rows=vars(exp)) +
+  geom_jitter(width=0.1, height=0, size=0.7, alpha=0.7, shape=16) +
+  geom_pointrange(data = fpf_aware_df_summary, aes(x=fpf_aware, y=mean, ymin = mean-sd, ymax = mean+sd),
+                  size=0.1, fatten=1.5, inherit.aes = FALSE, position=position_nudge(x =-0.2),color="blue",linewidth = 0.5) +
+  geom_text(data = fpf_aware_df_summary, aes(x=fpf_aware, y=2.75, label=paste0("n=", n)),size=3) +
+  labs(x = "Received inaccurate feedback",y = "Criterion shifting (\u0394c)") +
+  theme_bw()
+p_fpf_aware
+```
+
+
+```{r stitch + export plot}
+p_survey = p_use_info + p_fpf_aware +
+  plot_layout(widths = c(2, 1)) +  
+  plot_annotation(caption = "Error bars represent SD",
+                  tag_levels = list(c("(1)","(2)"))) 
+p_survey
+#ggsave("./ggsave/survey_cshift.pdf", plot=p_survey, device=cairo_pdf, width=9, height=6)
+```
+
+
+# test cshift 
+
+```{r plot cshift ~ info use}
+use_info_df
+fpf_aware_df
+
+x = fpf_aware_df %>% filter(fpf_aware=="Yes")
+
+use_info_dfx = use_info_df %>% 
+  mutate(id = paste0(exp," ",subj))
+
+ypos_group = use_info_dfx %>% 
+  group_by(exp, task) %>% 
+  summarise(ymax = max(cshift, na.rm = TRUE), .groups = "drop")
+
+use_info.lm = lmer(cshift ~ exp*task*use_info + (1|id), data = use_info_dfx)
+anova(use_info.lm)
+eff_size(use_info.emm, sigma = sigma(use_info.lm), edf = df.residual(use_info.lm))
+
+use_info.emm = emmeans(use_info.lm, ~ use_info | task *exp)
+
+use_info.pairs = pairs(use_info.emm, adjust="fdr") %>% data.frame() %>% 
+  separate(contrast, into=c("group1","group2"), remove=FALSE) %>%   # contrast = 1-2
+  mutate(info_type = case_when(task == "Strategic" ~ "Base rate (Strategic)",
+                               task == "FPF"       ~ "Feedback (FPF)"),
+         info_type = factor(info_type, levels = c("Base rate (Strategic)", "Feedback (FPF)")),
+         sig = case_when(p.value < .001 ~ "***",
+                         p.value < .01  ~ "**",
+                         p.value < .05  ~ "*",
+                         TRUE ~ NA)) %>% 
+  merge(ypos_group) %>% 
+  group_by(exp, task) %>% 
+  mutate(ypos = case_when(group1 == "No" & group2 == "Sometimes" ~ 3.25,
+                         group1 == "Sometimes" & group2 == "Always" ~ 3.25,
+                         group1 == "No" & group2 == "Always" ~ 3.55)) %>% 
+  ungroup()
+
+p_use_info_sig = p_use_info + 
+  ggpubr::stat_pvalue_manual(data = use_info.pairs, label="sig", xmin="group1",xmax="group2", 
+                             y.position = "ypos",tip.length = 0.01, size = 3)
+p_use_info_sig
+
+```
+```{r plot cshift ~ fpf aware}
+fpf_aware_dfx = fpf_aware_df %>% 
+  mutate(id = paste0(exp," ",subj))
+
+fpf_aware.lm = lm(cshift ~ fpf_aware * exp, data = fpf_aware_dfx)  # take out 1|id because n=1 per subj
+
+anova(fpf_aware.lm)
+fpf_aware.emm = emmeans(fpf_aware.lm, ~ fpf_aware | exp)
+
+fpf_aware.pairs = pairs(fpf_aware.emm, adjust="fdr") %>% data.frame() %>% 
+  separate(contrast, into=c("group1","group2"), sep=" - ", remove=FALSE) %>%   # contrast = 1-2
+  mutate(sig = case_when(p.value < .001 ~ "***",
+                         p.value < .01  ~ "**",
+                         p.value < .05  ~ "*",
+                         TRUE ~ NA)) %>% 
+  group_by(exp) %>% 
+  mutate(ypos = case_when(group1 == "Don't know" & group2 == "No" ~ 3.25,
+                         group1 == "No" & group2 == "Yes" ~ 3.25,
+                         group1 == "Don't know" & group2 == "Yes" ~ 3.55)) %>% 
+  ungroup()
+
+p_fpf_aware_sig = p_fpf_aware + 
+  ggpubr::stat_pvalue_manual(data = fpf_aware.pairs, label="sig", xmin="group1",xmax="group2", 
+                             y.position = "ypos",tip.length = 0.01, size = 3)
+p_fpf_aware_sig
+```
+
+
+```{r export figs together}
+p_survey_sig = p_use_info_sig + p_fpf_aware_sig +
+  plot_layout(widths = c(2, 1)) +  
+  plot_annotation(caption = "Error bars represent SD",
+                  tag_levels = list(c("(a)","(b)"))) 
+p_survey_sig
+#ggsave("./ggsave/survey_cshift_with_sig.pdf", plot=p_survey_sig, device=cairo_pdf, width=9, height=6)
+
+```
+
+
+
+
+```{r, eval=FALSE}
+# check corr for different levels of co-use
+use_info_df_wide = use_info_df %>% select(-info_type) %>% 
+  pivot_wider(names_from=task,values_from=c(use_info,cshift)) %>% 
+  filter(use_info_FPF==use_info_Strategic) %>% 
+  mutate(use_info_both = use_info_FPF) 
+
+use_info_df_wide %>%
+  group_by(exp, use_info_both) %>%
+  cor_test(cshift_Strategic, cshift_FPF)
+```
+
