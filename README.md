@@ -9,7 +9,7 @@
 
 - Folders:
   - `data_clean`: all trial-by-trial memory task data  
-  - `ggsave`: all figures except Fig.1  
+  - `ggsave`: all figures except Fig. 1  
   - `materials`: experiment code & stimuli, sample procedure (Fig. 1), survey questions   
   - `stats`: subject-level SDT summary statistics  
   
