@@ -2,12 +2,12 @@
 
 **Table of contents**:  
 
-- data analysis:
+- Data analysis code:
   - `get_sdt.Rmd`: main analysis code used to calculate SDT indices, run models, and generate figures/tables   
   - `sdt.R`: custom SDT-related wrapper functions used in the analysis (sensitivity, criterion, M-ratio, etc.)  
   - `survey_sdt.Rmd`: any analysis pertaining to survey data  
 
-- folders:
+- Folders:
   - `data_clean`: all trial-by-trial memory task data  
   - `ggsave`: all figures except Fig.1  
   - `materials`: experiment code & stimuli, sample procedure (Fig. 1), survey questions   
