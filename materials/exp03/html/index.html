@@ -1,0 +1,2284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory Study</title>
+
+    <script src="jspsych/jspsych.js"></script>
+
+    <script src="stimlist_640.js"></script>
+    <script src="stimlist_beads_each.js"></script>
+    <script src="stimlist_practice_10.js"></script>
+
+    <script type="text/javascript" src="lib/vendors/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="lib/jspsych-pavlovia-3.2.5.js"></script>
+
+    <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-image-button-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-button-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-slider-response.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-html-form.js"></script>
+    <script src="jspsych/plugins/jspsych-preload.js"></script>
+    <script src="jspsych/plugins/jspsych-instructions.js"></script>
+    <link href="jspsych/css/jspsych.css" rel="stylesheet">
+    <style>
+        .bold_25 {
+            font-size: 25px;
+            font-weight: bold;
+        }
+        .lower_22 {
+            font-size: 22px;
+            text-align: center;
+            position: relative;
+            top: 200px;
+            left: 0px;
+        }
+        .center_22 {
+            font-size: 22px;
+            text-align: center;
+        }
+        .align_left {
+            font-size: 16px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body></body>
+
+<script>
+
+    var stim_real = stim_640;   // n=640 images
+    //var stim_beads = beads_10;
+    var stim_beads_each = beads_10_each;
+    var stim_practice = stim_prac_10; // 10 practice trials
+
+
+    var consent_1 = '<p style = "font-weight:bold;">CONSENT FORM PAGE 1/5</p>' +
+        '<p>Protocol Number: 29-23-0027</p><p>Approved by the UCSB Human Subjects Committee for use thru: 02/14/2024</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">SUMMARY OF KEY INFORMATION:</p>' +
+        '<p>The purpose of this study is to better understand how people make decisions in different situations. You are being asked to participate in a computer task. The computer task is self-paced but, the overall expected time commitment will be about 30-60 minutes. You may not directly benefit from this study, but your participation will inform us on how people make decisions. The online computer task can be boring and you may become mentally fatigued during the task. We may share your de-identified data with our collaborators at the United States Army Research Laboratory. This research is funded by the U.S. Department of Defense.</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">PURPOSE:</p>' +
+        '<p>You are being asked to participate in a research study. Your participation is voluntary. Please feel free to ask questions at any time if there is anything you do not understand. The goal of these experiments is to investigate how you make decisions and inferences under different circumstances. We may use the data gathered in this experiment to improve the task for use in subsequent experiments. The data obtained through your participation may be included with data from other subjects as part of a scientific study to appear in the peer reviewed literature. The Department of Defense is funding the research study.</p>'
+    ;
+    var consent_2 = '<p style = "font-weight:bold;">CONSENT FORM PAGE 2/5</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">PROCEDURE: </p>' +
+        '<p>If you decide to participate, we will ask you to do two things. You will first be given a behavioral test on a computer where you will be asked to classify an image or remember information presented on the computer screen. The second is to participate in assessments that are intended to assess certain characteristics and traits about you that can explain individual differences. These self-assessments will include tests of personality, executive functioning, cognitive flexibility, styles of learning, etc. None of the assessments will have identifying information about you. These sessions may last between 30 and 60 minutes. Up to 500 subjects will be tested.</p>' +
+        '<p>All data will be collected during the testing as part of the computer program, and will be automatically anonymized. Data will only be accessible to experimenters within the lab. You will either receive course credit or monetary compensation for your participation in the experiment. If you choose to withdraw at any point, you will still receive credit/compensation. The only equipment used is a computer, which presents visual stimuli and record responses. You will be required to attend to stimuli throughout the experiment and respond as best as you can.</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">RISKS: </p>' +
+        '<p>There is minimal risk from the behavioral testing. The risks are similar to those from working on a computer for an extended amount of time, such as mental fatigue.</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">BENEFITS: </p>' +
+        '<p>There are no direct benefits to you for participating in the experiment. These data are collected purely for the purpose of research and do not have a clinical or diagnostic value.</p>'
+    ;
+    var consent_3 = '<p style = "font-weight:bold;">CONSENT FORM PAGE 3/5</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">CONFIDENTIALITY: </p>' +
+        '<p>All information you provide will be kept confidential except as required by law. Absolute confidentiality cannot be guaranteed, since research documents are not protected from subpoena. Your name will not be used in any publication that may result from this study. Your name or other personal information will not be used to identify your performance data. Questionnaires will be administered online.</p>' +
+        '<p>When responses are submitted online, they are added to a private database that is accessible only by lab personnel using a highly secure password. All responses will be coded by a subject ID that is not traceable. The Office of the Committee for the Protection of Human Subjects at UCSB may request access to this form to ensure procedures designed to protect research participants are being properly followed. Representatives of the U.S. Army Medical Research and Materiel Command are eligible to review research records as a part of their responsibility to protect human subjects in research. Data gathered from this study will be maintained by the investigator indefinitely or as required by federal or state regulation. Your de-identified data might be shared with research collaborators at UC Santa Barbara, the Army Research Laboratory, and possibly researchers at other universities for research purposes only.</p>' +
+        '<p>The Department of Defense (DOD) is funding this research study. The DOD or Federal Representatives may access research records for the protection of human subjects. We may share your data with our collaborators at the United States Army Research Laboratory.</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">COST/PAYMENT: </p>' +
+        '<p>There are no costs to you for your participation in this study.</p>' +
+        '<p>You will receive compensation for participating using the following guidelines: 1 credit hours, plus up to $6.40 bonus payment based on task performance.</p>'
+    ;
+    var consent_4 = '<p style = "font-weight:bold;">CONSENT FORM PAGE 4/5</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">RIGHT TO REFUSE OR WITHDRAW: </p>' +
+        '<p>You may refuse to participate and still receive any benefits you would receive if you were not in the study. You may change your mind about being in the study and quit after the study has started.</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">PRINCIPAL INVESTIGATORS DISCLOSURE OF PERSONAL AND FINANCIAL INTERESTS IN THE RESEARCH AND STUDY PROGRAM:</p>' +
+        '<p>The study investigators have no financial interest in this research and will not benefit monetarily from this study.</p>' +
+        '<p style = "font-weight:bold;text-decoration:underline;">QUESTIONS: </p>' +
+        '<p>If you have any questions about this research project or if you think you may have been injured as a result of your participation, please contact: Dr. Michael Miller by phone at (805) 893-6190 or by email at michael.miller@psych.ucsb.edu. If you have any questions regarding your rights and participation as a research subject, please contact the Human Subjects Committee at (805) 893-3807 or hsc@research.ucsb.edu. Or write to the University of California, Human Subjects Committee, Office of Research, Santa Barbara, CA 93106-2050.</p>'
+    ;
+    var consent_5 = '<p style = "font-weight:bold;">CONSENT FORM PAGE 5/5</p>' +
+        '<p style = "font-weight:bold;">If you AGREE to participate in this study, please click Next to advance to instructions.</p>' +
+        '<p style = "font-weight:bold;">If you REFUSE to participate, please close the page to be withdrawn from the study.</p>'
+    ;
+
+
+
+    var ins_hi = '<pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:18px;">Hello! Welcome to the study.</pre>' +
+                 '<p>Please take a seat. The experimenter will go over some instructions before you begin.</p>';
+
+
+    var ins_baseline_test_pre = '<p>Next, you will be tested on your memory of the images you just saw.</p>' +
+    '<p>You will press keys on your keyboard to indicate whether an image is </p>' +
+    '<p style = "font-weight: bold;"old</p>' + '<p> (you saw it in the study session earlier) or </p>' +
+    '<p style = "font-weight: bold;"new</p>' + '<p> (it did not appear in the study session).</p>' +
+    '<p>Do not hesitate for too long on each image.</p>' +
+    '<p>Just as a reminder, you will be rewarded for EVERY correct memory decision. There is no reward or penalty for incorrect decisions.</p>';
+    '<p>Press SPACE to continue.</p>';
+    var ins_baseline_t1 = '<p>Press RETURN to start the first memory test.</p>';
+    var ins_baseline_t2 = '<p>Press RETURN to start the second memory test.</p>';
+    var ins_test_1 = ins_baseline_t1;
+    var ins_test_2 = ins_baseline_t2;
+
+    var ins_nb_study = '<p>Next, you will see another set of images, to be tested in a memory test later.</p>' +
+        '<p>None of these images have appeared in memory or test sessions earlier, so please do your best to remember each one.</p>' +
+        '<p>When you are ready, press RETURN to begin viewing the images.</p>';
+    var ins_nb_test_pre = '<p>Next, you will be tested on your memory of the images you just saw, just like the previous memory tests.</p>' +
+        '<p>None of the images you will see have appeared in previous sessions, so you should base memory decisions on the current memory study-test session only.</p>' +
+        '<p>With each image, there will be hints and other information to help you make your memory decision.</p>' +
+        '<p>You can utilize those information to improve your accuracy and receive a higher payout.</p>' +
+        '<p>Just as a reminder, the payout structure is that you will be rewarded for EVERY correct memory decision. There is no reward or penalty for incorrect decisions.</p>' +
+        '<p>Press SPACE to continue.</p>';
+    var ins_prob_t1 = ins_baseline_t1;
+    var ins_prob_t2 = ins_baseline_t2;
+
+    //var ins_fpf_study = ins_prob_study;
+    //var ins_fpf_test_pre = ins_prob_test_pre;
+    var ins_fpf_t1 = ins_baseline_t1;
+    var ins_fpf_t2 = ins_baseline_t2;
+
+
+    // initializing timeline
+    var timeline = [];
+
+    /* init connection with pavlovia.org */
+    var pavlovia_init = {
+        type: "pavlovia",
+        command: "init",
+    };
+    timeline.push(pavlovia_init);
+    /* edit out for local version*/
+
+    // preload media (stim images)
+    var preload_media = {
+        type: 'preload',
+        auto_preload: true,
+        show_progress_bar: true // false to hide progress bar
+    };
+    timeline.push(preload_media);
+
+    // randomizer function: getRandomInt
+    function roll_dice(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min);
+        //The maximum is exclusive and the minimum is inclusive
+    }
+    randomizer = roll_dice(1, 3);    // roll between 1,2
+    //console.log("if there is a number, randomizer works", randomizer)          // meaningless console log for verifying randomizer only
+
+    // ==================== randomize mem stim image specs =====================
+
+    // old/new key location:
+    var old_new_key = roll_dice(1,3);
+    if (old_new_key === 1) {
+        var old_new_tag = 'as old, kl new'; // this tag is only for data tagging (redundancy)
+
+        var old_high_key = 'a';
+        var old_low_key = 's';
+
+        var new_low_key = 'k';
+        var new_high_key = 'l';
+
+        var old_new_key_prompt =
+        '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">OLD                                                             NEW</pre>' +
+        '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">high confidence      low confidence           low confidence      high confidence</pre>' +
+        '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">a                              s                                  k                              l</pre>' +
+        '<p></p>';
+//        var old_new_key_prompt = '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">                OLD                                      NEW                </pre>' +
+//                                 '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">high confidence     low confidence        low confidence     high confidence</pre>' +
+//                                 '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">       a                  s                      k                  l       </pre>'
+
+        var this_old_high_key = 'a';
+        var this_old_low_key = 's';
+        var this_new_low_key = 'k';
+        var this_new_high_key = 'l';
+//        var old_new_key_prompt = '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">f=old                    j=new</pre>';
+//        var old_new_key_prompt_text = 'f=old, j=new';
+    } else if (old_new_key === 2) {
+      old_new_tag = 'as new, kl old';
+
+      new_high_key = 'a';
+      new_low_key = 's';
+
+      old_low_key = 'k';
+      old_high_key = 'l';
+
+      var old_new_key_prompt =
+      '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">NEW                                                             OLD</pre>' +
+      '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">high confidence      low confidence           low confidence      high confidence</pre>' +
+      '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">a                              s                                  k                              l</pre>' +
+      '<p></p>';
+
+//      var old_new_key_prompt = '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">                NEW                                      OLD                </pre>' +
+//                               '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">high confidence     low confidence        low confidence     high confidence</pre>' +
+//                               '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">       a                  s                      k                  l       </pre>'
+
+      var this_new_high_key = 'a';
+      var this_new_low_key = 's';
+      var this_old_low_key = 'k';
+      var this_old_high_key = 'l';
+//        old_new_key_prompt = '<p></p><pre style = "font-family:OpenSans,sans-serif; font-weight:bold; font-size:20px;">f=new                    j=old</pre>';
+//        old_new_key_prompt_text = 'f=new, j=old';
+    }
+    //console.log("old/new key placement: 1=fj, 2=jf", old_new_key);
+    // tag old/new key position to all data (redundancy!)
+    jsPsych.data.addProperties({
+        old_new_key: old_new_tag
+    });
+
+
+    // ==================== load all materials ========================
+    // convert csv to json: csvjson.com
+    // create standalone json data (as a .js file in exp folder) as a new var
+
+
+    // ==================== shuffle stim list function =================
+    function shuffleArray(array) {  // shuffle a one dimensional array / one level shuffling
+        for (var i = array.length-1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i+1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    // ==================== divide & assign study/test lists ==========
+    var prob_studied = [];
+    var prob_old = [];
+    var prob_new = [];
+    var fpf_studied = [];
+    var fpf_old = [];
+    var fpf_new = [];
+
+    var study_list_length = 160;    // initialize study list (block) length
+    // if stim length changes, change here so no need to edit for each list/block
+
+    // IMPORTANT: convert 2+D array (loaded as json file) into 1D array so that shuffle & subset can work properly
+
+    var stim_path = [];
+    for (var i = 0; i < study_list_length*4; i++) {
+        stim_path.push(stim_real[i].img_name);
+    }
+    shuffleArray(stim_path);
+
+    for (var i = 0; i < study_list_length; i++) {
+
+        prob_studied[i] = stim_path[i];
+        prob_old[i] = prob_studied[i];
+        prob_new[i] = stim_path[i+study_list_length];
+
+        fpf_studied[i] = stim_path[i+2*study_list_length];
+        fpf_old[i] = fpf_studied[i];
+        fpf_new[i] = stim_path[i+3*study_list_length];
+    }
+
+    shuffleArray(prob_studied);
+    shuffleArray(fpf_studied);
+
+    // re-inherit all already studied items (just to make sure the two lists are the same)
+    prob_old = prob_studied;
+    fpf_old = fpf_studied;
+
+    // shuffle again
+    shuffleArray(prob_old);
+    shuffleArray(prob_new);
+    shuffleArray(fpf_old);
+    shuffleArray(fpf_new);
+
+    var prob_lib = [];
+    var prob_con = [];
+    var fpf_lib = [];
+    var fpf_con = [];
+
+    //for (i = 0; i < study_list_length*0.75; i++) {
+    for (i = 0; i < study_list_length/2; i++) {
+        // PREVIOUSLY 75% items from new list -> con
+        // NOW 50/50
+        prob_lib.push({img_name: prob_old[i], studied: 1});
+        prob_con.push({img_name: prob_new[i], studied: 0});
+
+    }
+    //for (i = study_list_length*0.75; i < study_list_length; i++) {
+    for (i = study_list_length/2; i < study_list_length; i++) {
+        // PREVIOUSLY rest 25% items from new list -> lib
+        // NOW 50/50
+        prob_lib.push({img_name: prob_new[i], studied: 0});
+        prob_con.push({img_name: prob_old[i], studied: 1});
+    }
+
+    for (i = 0; i < study_list_length/2; i++) {            // FPF is 50/50 not 75/25
+        fpf_lib.push({img_name: fpf_old[i], studied: 1});
+        fpf_con.push({img_name: fpf_new[i], studied: 0});
+    }
+    for (i = study_list_length/2; i < study_list_length; i++) {
+        fpf_lib.push({img_name: fpf_new[i], studied: 0});
+        fpf_con.push({img_name: fpf_old[i], studied: 1});
+    }
+
+    // shuffle again to mix up old/new
+    shuffleArray(prob_lib);
+    shuffleArray(prob_con);
+    shuffleArray(fpf_lib);
+    shuffleArray(fpf_con);
+
+    // roll dice to randomize lib/con in EACH task
+    var lib_con_prob = roll_dice(1,3);
+    if (lib_con_prob === 1) {
+        var prob_cond1 = prob_lib;
+        var prob_cond2 = prob_con;
+        //console.log('prob cond order == 1: lib-con');
+        var lib_con_prob_text = 'lib-con';
+        curr_cond1 = 'lib';
+        curr_cond2 = 'con';
+        prob_hint_1 = '<br><p>Hint: 75% of images in this memory test are OLD.</p>';
+        prob_hint_2 = '<br><p>Hint: 75% of images in this memory test are NEW.</p>'
+    } else if(lib_con_prob === 2) {
+        prob_cond1 = prob_con;
+        prob_cond2 = prob_lib;
+        //console.log('prob cond order == 2: con-lib');
+        lib_con_prob_text = 'con-lib';
+        curr_cond1 = 'con';
+        curr_cond2 = 'lib';
+        prob_hint_1 = '<br><p>Hint: 75% of images in this memory test are NEW.</p>';
+        prob_hint_2 = '<br><p>Hint: 75% of images in this memory test are OLD.</p>'
+    };
+
+    var lib_con_fpf = roll_dice(1,3);
+    if (lib_con_fpf === 1) {
+        var fpf_cond1 = fpf_lib;
+        var fpf_cond2 = fpf_con;
+        //console.log('FPF cond order == 1: lib-con');
+        var lib_con_fpf_text = 'lib-con';
+    } else {
+        fpf_cond1 = fpf_con;
+        fpf_cond2 = fpf_lib;
+        //console.log('FPF cond order == 2: con-lib');
+        lib_con_fpf_text = 'con-lib';
+    };
+
+    // record lib-con order in data
+    jsPsych.data.addProperties({
+        cond_order_prob: lib_con_prob_text,
+        cond_order_fpf: lib_con_fpf_text,
+    });
+
+    // log task name for procedure
+    // prob/fpf order also needs to be logged in data
+    // rolled order will be used to run timeline.push
+    //var curr_task1 = 'baseline';
+    var prob_fpf_order = roll_dice(1,3);
+    if (prob_fpf_order === 1) {
+        //var curr_task2 = 'prob';
+        //var curr_task3 = 'false_feed';
+        var prob_in_study = 1;
+        var fpf_in_study = 2;
+        //console.log("task order: " + prob_fpf_order + ", prob-fpf");
+        var prob_fpf_order_text = 'prob/fpf order: 1=prob-fpf';
+    } else if (prob_fpf_order === 2) {
+        //curr_task2 = 'false_feed';
+        //curr_task3 = 'prob';
+        fpf_in_study = 1;
+        prob_in_study = 2;
+        //console.log("task order: " + prob_fpf_order + ", fpf-prob");
+        prob_fpf_order_text = 'prob/fpf order: 2=fpf-prob';
+    }
+    jsPsych.data.addProperties({
+        prob_fpf_order: prob_fpf_order_text,
+    })
+
+
+    var total_earned = 0;           // initialize $$$ counter
+    var earned_this_trial = 0;      // trial by trial $$$ counter
+    var reward_per_correct = 1;     // change this (instead of individually within proc) if payment scheme changes
+    var penalty_per_wrong = 0;      // no penalty for incorrect in this one!!
+
+    jsPsych.data.addProperties({
+        study_reward: reward_per_correct,
+        study_penalty: penalty_per_wrong,
+    });
+
+
+    // define trial by trial feedback text/style
+    var feedback_yay = '<p style="font-weight:bold;color:green;">Correct!</p>';
+    var feedback_nay = '<p style="font-weight:bold;color:red;">Wrong.</p>';
+    var feedback_meh = '<p style="font-weight:bold;color:orange;">Too slow</p>';
+    var feedback_interrupted = '<p style="font-weight:bold;color:orange;">Please respond faster.</p>' +
+        '<p style="font-weight:bold;color:orange;">When you are ready, press RETURN to continue the memory test.</p>';
+
+    // define fixation once to be used for all 3 tasks
+    var fixation = {
+        type: 'html-keyboard-response',
+        stimulus: '+',
+        choices: 'NO_KEYS',
+        trial_duration: 200,
+    };
+
+    var too_slow = {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+            let resp_key = jsPsych.data.get().last(1).values()[0].response;
+            if (resp_key === null) {
+                // if no response given after 10s (max test trial duration)
+                //console.log("Too slow!");
+                return feedback_meh + feedback_interrupted;
+            } else {return ''};
+        },
+        choices: function() {
+            let resp_key = jsPsych.data.get().last(1).values()[0].response;
+            if (resp_key === null) {
+                return ['Enter'];
+            } else {return ['NO_KEYS']};
+        },
+        stimulus_duration: function() {
+            let resp_key = jsPsych.data.get().last(1).values()[0].response;
+            if (resp_key === null) {
+                return null;
+            } else {return 0};
+        },
+        trial_duration: function() {
+            // 200ms gap (ITI) if NOT null response
+            let resp_key = jsPsych.data.get().last(1).values()[0].response;
+            if (resp_key === null) {
+                return null;
+            } else {return 200};
+        },
+        response_ends_trial: function() {
+            let resp_key = jsPsych.data.get().last(1).values()[0].response;
+            if (resp_key === null) {
+                return true;
+            } else {return false};
+        },
+    };
+
+    // define study start/end screen - dynamic display for each instance
+    var study_phase_count = 0;    // must be declared as numeric instead of string, or it won't update incrementally (will only show the FINAL assigned value)
+    var begin_study = {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+            study_phase_count +=1;   // update block # each time it's run
+            return 'STUDY-TEST SESSION ' + study_phase_count + ' of 2, STUDY PHASE' +
+                   '<p>Fix your eyes on the center of the screen. Images will appear briefly, one at a time.</p>' +
+                   '<p>Try to remember these scene images.</p>';
+        },
+        prompt: 'Press RETURN to begin the study phase.',
+        choices: ['Enter'],
+        response_ends_trial: true,
+    };
+
+    var end_study = {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+            // no need to += since it's already done at the begin ins screen
+            return 'SESSION ' + study_phase_count + ' STUDY PHASE COMPLETE!';
+        },
+        prompt: '<p>Next, your memory will be tested on the images you just saw during the study phase.</p>' +
+                '<p>You will see some images from the study phase, mixed with some images that never appeared in the study phase.</p>' +
+                '<p>You will be asked to indicate whether any given image is "old" (you saw it during the study phase) or "new" (you did not see it during the study phase).</p>' +
+                '<p>Press the corresponding key on the keyboard to indicate what your decision is (old vs new), and what your confidence level is (low vs high) for your decision.</p>' +
+                '<p>Labels will appear below the choices to let you know which keys to press for which option.</p>' +
+                '<p>Press RETURN to begin the memory test.</p>',
+        choices: ['Enter'],
+        response_ends_trial: true,
+    };
+
+    var test_in_task = 0;  // needs to be reset in every task
+    var begin_test = {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+            test_in_task += 1;
+            if (test_in_task >= 3) {
+                test_in_task = 1;
+            };
+            // reminder for $ based on accuracy
+            var test_ins_any_text = 'This is memory test ' + test_in_task + ' of 2 for the previous study phase.' +
+                '<p>There will not be any images in the memory test from other memory study or test phases, so focus on the current phase only.</p>' +
+                '<p>Remember, your payout depends on how many test images you correctly identify as either old (it appeared in this study phase) or new (it did NOT appear in this study phase).</p>' +
+                '<p>Please try to utilize any information the test provides you to improve your total accuracy and earn more payout.</p>';
+
+            // prompt to use additional cues to help accuracy in task 2/3, based on study_phase_count
+            // IMPORTANT: this is removed in no baseline version (FPF03) because we do not need to distinguish between with/without information anymore
+            //var test_ins_optional_text = '<p style="font-weight:bold">In this memory test, you can use information on screen to help you make your memory decisions.</p>';
+
+            if (study_phase_count === 1) {
+                return test_ins_any_text;
+            } else if (study_phase_count > 1) {
+                //return test_ins_any_text + test_ins_optional_text;
+                return test_ins_any_text;
+            }
+        },
+        prompt: 'Press RETURN to begin memory test.',
+        choices: ['Enter'],
+        response_ends_trial: true,
+    };
+
+
+    var end_test = {
+        type: 'html-keyboard-response',
+        stimulus: function() {
+            //the +1 needs to be wrapped in a function to show up correctly
+            return 'Memory test ' + test_in_task + ' of 2 complete for current memory phase!';
+        },
+        prompt: 'Press RETURN to continue.',
+        choices: ['Enter'],
+        response_ends_trial: true,
+    };
+
+
+
+
+    // ============ WELCOME ==============
+    var welcome = {
+        type: 'html-keyboard-response',
+        stimulus: ins_hi,
+        choices: ['Enter'],
+        response_ends_trial: true,
+        post_trial_gap: 200,
+    }
+    timeline.push(welcome);
+
+    // ============ CONSENT ==============
+
+    var consent_form = {
+        type: 'instructions',
+        pages: [
+            consent_1,
+            consent_2,
+            consent_3,
+            consent_4,
+            consent_5,
+        ],
+        button_label_next: 'Next',
+        button_label_previous: 'Previous',
+        show_clickable_nav: true,
+        css_classes: ['align_left'],
+    }
+    timeline.push(consent_form);
+
+
+    // ============ sub ID, initials, date/time, payment info =================
+    var rand_subID = jsPsych.randomization.randomID(8);
+    // add subID to all trials
+    jsPsych.data.addProperties({
+        subj_rand: rand_subID,
+    })
+
+    var subj_info = {
+        type: 'survey-text',
+        questions: [
+            //add required: true to run
+            {
+                prompt: 'Please enter your four-letter Participant ID code.',
+                name: 'subID',
+                placeholder: 'e.g. ABCD',
+                required: true,
+            },
+            {prompt: 'Your first and last initials:', name: 'subInitial', placeholder: 'e.g. AB', required: true},
+            {prompt: "Today's date:", name: 'sona_date', placeholder: 'format: mm/dd/yyyy', required: true},
+            {prompt: 'Your SONA appointment time:', name: 'sona_time', placeholder: 'e.g. 9:00 AM', required: true},
+            {prompt: 'There is a performance-based cash bonus in this study, in the form of an Amazon gift card. If you would like to be paid via a different method, please note below.',
+                name: 'payment_handle',
+                placeholder: '', required: false}
+        ],
+        // add manual input 4-letter subID to all trials
+        on_finish: function(data) {
+            var subID_text = data.response.subID;
+            var sub_ini = data.response.subInitial;
+            var exp_sona_date = data.response.sona_date;
+            var exp_sona_time = data.response.sona_time;
+            var pay_method = data.response.payment_handle;
+
+            jsPsych.data.addProperties({
+                subj: subID_text,
+                subj_ini: sub_ini,
+                subj_date: exp_sona_date,
+                subj_time: exp_sona_time,
+                subj_pay: pay_method,
+            })
+        }
+    };
+    timeline.push(subj_info);
+
+    // ============= demographics questions ==============
+    // add required:true to run
+    var subj_demo_1 = {
+        type: 'survey-text',
+        questions: [
+            {prompt: 'What is your age?', placeholder: 'enter numbers only', name: 'age', required: true}
+        ]
+    };
+    var subj_demo_2 = {
+        type: 'survey-multi-choice',
+        questions: [
+            {
+                type: 'survey-multi-choice',
+                prompt: 'What is your gender?',
+                options: ['female', 'male', 'non-binary / other', 'prefer not to answer'],
+                name: 'gender',
+                required: true
+            },
+            {
+                type: 'survey-multi-choice',
+                prompt: 'What is your race and ethnicity?',
+                options: [
+                    'American Indian or Alaska Native', 'Asian',
+                    'Black or African American', 'Hispanic or Latino',
+                    'Native Hawaiian or Other Pacific Islander', 'White', 'More than one race/ethnicity',
+                    'other / prefer not to answer'],
+                name: 'ethn',
+                required: true
+            },
+            {
+                type: 'survey-multi-choice',
+                prompt: 'Which is your dominant hand?',
+                options: ['left', 'right', 'ambidextrous', 'other / prefer not to answer'],
+                name: 'hand',
+                required: true
+            },
+            ]
+    };
+    timeline.push(subj_demo_1, subj_demo_2);
+
+    // ============= PRE SURVEY: attitude ==============
+    var attitude_scale_label = '<pre style = "font-family:OpenSans,sans-serif; font-size:20px;">Not at all true                  Somewhat true                  Very true</pre>'
+    var survey_pre_1 = {
+        type: 'html-slider-response',
+        stimulus: '<p>Please indicate how true this statement is for you:</p>' +
+            '<p style="font-weight:bold;">I am motivated to perform well during this task.</p>',
+        labels: ['1', '2', '3', '4', '5', '6', '7'],
+        min: 1,
+        max: 7,
+        step: 1,
+        slider_start: 1,
+        prompt: attitude_scale_label,
+        require_movement: true,
+    };
+    var survey_pre_2 = {
+        type: 'html-slider-response',
+        stimulus: '<p>Please indicate how true this statement is for you:</p>' +
+            '<p style="font-weight:bold;">In general, I am confident in my memory.</p>',
+        labels: ['1', '2', '3', '4', '5', '6', '7'],
+        min: 1,
+        max: 7,
+        step: 1,
+        slider_start: 1,
+        prompt: attitude_scale_label,
+        require_movement: true,
+    };
+
+    timeline.push(survey_pre_1);
+    timeline.push(survey_pre_2);
+
+
+    // ==================== beads task start instruction =======================
+    var beads_ins_pre = '<p>Next, you will conduct a simple decision-making task.</p>' +
+    '<p>For each trial of the task, you will see two jars containing mixed-colored beads.</p>' +
+    '<p>Up to 10 beads will be randomly drawn, one at a time, from one of the two jars.</p>' +
+    '<p>Your goal is to correctly decide which jar the beads are being drawn from.</p>' +
+    '<p>There are three trials (color pairs) in this task.</p>' +
+    '<p> </p>' +
+    '<p>Ready? Press the button below to begin this task.</p>';
+
+    var show_beads_ins_pre = {
+      type: 'html-button-response',
+      stimulus: beads_ins_pre,
+      choices: ['Begin task']
+    };
+
+    timeline.push(show_beads_ins_pre);
+
+    // ==================== initialize beads task sequence =====================
+    var total_bins = 3;    // define total number of bins so no need to manually change if we add more bins
+
+    var this_bead = [];
+    for (var b_i = 0; b_i < 11*total_bins; b_i++) {
+      this_bead.push(stim_beads_each[b_i]);
+    }
+
+
+    var i_bin = 0;
+    var i_draw = 0;
+
+    for (i_bin = 0; i_bin < total_bins; i_bin++) {
+      i_draw = 0;   // TO DO: make sure dtd is accurate to number of draws
+
+      var start_draw = {
+        type: 'image-button-response',
+        // stimulus is 1st/_0 of each bin (1, 12, 23 in all images)
+        stimulus: this_bead[i_bin*11 + i_draw],
+        stimulus_height: 600,
+        maintain_aspect_ratio: true,
+        data: {
+          bin: i_bin+1,
+          draw: i_draw,
+        },
+        choices: ['See the first draw.'],
+        prompt: '<p>Beads are randomly drawn from one of the two jars shown above.</p>' +
+                '<p>You have up to ten draws to decide which jar the beads are from.</p>',
+
+        on_finish: function(data) {
+          console.log("bin: ", data.bin);
+          console.log("draw: ", data.draw);
+          console.log("decision made this draw:", data.response);
+          // use data.response for button presses but use comparekeys for keyboard responses
+          data.dtd = 0;
+          data.decision = "no";
+        }
+      }
+      timeline.push(start_draw);
+
+
+      i_draw = 1;
+
+      for (i_draw = 1; i_draw < 11; i_draw++) {
+        // have i_draw start at i=1 (2nd image / first bead drawn)
+
+        // draw beads
+        var each_draw = {
+          type: 'image-button-response',
+          // stimulus should be img 2:11 (bead 1:10) of each bin
+          stimulus: this_bead[i_bin*11 + i_draw],
+          stimulus_height: 600,
+          maintain_aspect_ratio: true,
+          data: {
+            bin: i_bin+1,
+            draw: i_draw,
+          },
+          choices: ['No, I would like to see another bead', 'Yes, I have made a decision'],
+          prompt: '<p>A random bead has been drawn from the select jar.</p>' +
+                  '<p>Would you like to make a decision regarding which jar beads are being drawn from?</p>',
+          on_finish: function(data) {
+            console.log("bin: ", data.bin);
+            console.log("draw: ", data.draw);
+            console.log("decision made this draw:", data.response);
+
+            if (data.response == 0) {
+              data.decision = "no";                          // decision not made in this trial
+              data.dtd = data.draw;                          // delay DTD to next draw
+            } else if (data.response == 1) {
+              data.decision = "this trial";                  // decision is made in this trial
+              data.dtd = data.draw - 1;                      // DTD is this draw
+              //jsPsych.endCurrentTimeline();                  // ends the entire outer loop for some reason
+            } else {
+              data.decision = NULL;
+              data.dtd = NULL;
+            }
+          }
+        }
+
+        var each_draw_loop = {
+          timeline: [each_draw],
+          conditional_function: function(){
+            var data = jsPsych.data.get().last(1).values()[0];
+            if(jsPsych.pluginAPI.compareKeys(data.response, 0)) {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        }
+
+        timeline.push(each_draw_loop);
+      }
+
+
+      i_draw = 0;
+
+      // show bin choices
+      var draw_decision = {
+        type: 'image-button-response',
+        // stimulus should be back to 0
+        stimulus: this_bead[i_bin*11 + i_draw],
+        stimulus_height: 600,
+        maintain_aspect_ratio: true,
+        data: {
+          bin: i_bin+1,
+          draw: i_draw,
+        },
+        choices: ['Jar A', 'Jar B'],
+        prompt: '<p>Which jar have you decided beads are being drawn from?</p>',
+      };
+
+      timeline.push(draw_decision);
+
+    }
+
+
+
+    // ==================== end beads task instruction =========================
+    var beads_ins_post = '<p>Decision making task complete!</p>' +
+    '<p>Next, you will conduct the main memory task of this study, where you will see some images and make recognition decisions about those images afterwards.</p>' +
+    '<p>You will see more detailed instructions once you proceed.</p>' +
+    '<p>Please rest your eyes now if you would like, as the memory task requires your full undivided attention.</p>' +
+    '<p>Ready? Press the button below to begin the memory task.</p>';
+
+    var end_beads_task = {
+      type: 'html-button-response',
+      stimulus: beads_ins_post,
+      choices: ['Proceed to memory task']
+    };
+
+    timeline.push(end_beads_task);
+
+
+    // ==================== OVERALL INSTRUCTIONS =============
+    var overall_ins_1 = '<p>Welcome to the experiment!</p><p>Please ensure you can conduct this task in one sitting, without distractions.</p>' +
+        '<p>Please maximize (full screen) your web browser for this task.</p>' +
+        '<p>Please silence your phone and computer, and minimize other web browsers or applications that might be open.</p>' +
+        '<p>We greatly appreciate your undivided attention.</p>';
+    var overall_ins_2 = '<p>In this task, you will view many scene images during study blocks. </p>' +
+        '<p>After EACH study block, your memory will be tested.</p>' +
+        '<p>Please place your left hand on the A and S keys, and your right hand on the K and L keys on your keyboard.</p>' +
+        '<p>Make sure Caps Lock is turned off.</p>' +
+        '<p>During the test phase, you will press one of these 4 keys on your keyboard to indicate whether you remember seeing a given image in the MOST RECENT study block.</p>' +
+        '<p>There are four options for each image. While you decide whether an image is old or new, you will also indicate whether your confidence level is low or high for that decision.</p>' +
+        '<p>Options will appear with each test image to remind you of which keys to press.</p>' +
+        '<p style = "font-weight:bold;">Your monetary payout in this study depends entirely on your memory performance, so please pay attention during the task. The more accurate your memory judgments are, the more you will earn.</p>'
+    ;
+    var overall_ins_3 = '<p>There are a total of TWO study blocks. Each study block will be followed by TWO memory tests.</p>' +
+        '<p>In memory tests, your memory will only be tested on the MOST RECENT study block.</p>' +
+        '<p>Images that appeared in earlier study or test blocks will NOT be shown again. That is, when a new study block begins, you can forget about all previously shown images. </p>';
+
+    var overall_ins_4 = '<p>Now, you will have a few practice trials to help you become more familiar with the procedure of this memory task.</p>' +
+                        '<p>Note that, the real memory task will look and feel similar but not exactly the same as these practice trials.</p>' +
+                        '<p>Click next to begin a practice study phase, followed by a practice test phase.</p>'
+//    var overall_ins_4 = '<p>You finished the instructions! </p><p>If you have any questions, please ask the experimenter now.</p>' +
+//        '<p>When you are ready, click Next to begin the first study phase.</p>';
+
+
+    var grand_instructions = {
+        type: 'instructions',
+        pages: [
+            overall_ins_1,
+            overall_ins_2,
+            overall_ins_3,
+            overall_ins_4,
+        ],
+        show_clickable_nav: true,
+        //css_classes: ['align_left'],
+    }
+    timeline.push(grand_instructions);
+
+
+    // ==================== PRACTICE BLOCK =============
+
+    var practice_study_list = [];
+    var practice_test_list = [];
+
+    for (i = 0; i < 5; i++) {
+        practice_study_list[i] = stim_practice[i].img_name;
+    }
+
+    for (i = 0; i < 10; i++) {
+        practice_test_list[i] = stim_practice[i].img_name;
+    }
+
+    shuffleArray(practice_study_list);
+    shuffleArray(practice_test_list);
+
+    for (var i_study_practice = 0; i_study_practice < 5; i_study_practice++) {
+
+      var practice_study = {
+        type: 'image-keyboard-response',
+        stimulus: practice_study_list[i_study_practice],
+        choices: 'NO_KEYS',
+        prompt: '',
+        stimulus_duration: 1000,
+        trial_duration: 1200,       // leaving a gap here so no need for a ITI block
+        response_ends_trial: false,
+        data: {
+            task: 'practice',
+            task_order: -1,
+            phase: 'study',
+            n_trial: i_study_practice,
+        },
+        on_finish: function(data) {
+            console.log("n_trial: ", data.n_trial+1);
+        },
+      };
+
+      timeline.push(fixation, practice_study);
+    };
+
+    var practice_intermission = {
+      type: 'html-keyboard-response',
+      stimulus: '<p>Practice study phase complete!</p><p>Press RETURN to proceed to the memory test for practice study phase images you just saw.</p>',
+      choices: ['Enter'],
+      response_ends_trial: true
+    };
+    timeline.push(practice_intermission);
+
+
+    for (var i_test_practice = 0; i_test_practice < 10; i_test_practice++) {
+
+      var practice_test = {
+        type: 'image-keyboard-response',
+        stimulus: practice_test_list[i_test_practice],
+        choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+        prompt: old_new_key_prompt,
+        trial_duration: 10000,
+        response_ends_trial: true,
+        data: {
+            n_trial: i_test_practice,
+            task: 'practice',
+            task_order: -1,
+            phase: 'test',
+        },
+        on_finish: function(data) {
+            console.log("n_trial: ", data.n_trial+1);
+        },
+
+      };
+      timeline.push(practice_test, too_slow);
+    }
+
+    var end_practice = {
+      type: 'html-keyboard-response',
+      stimulus: function() {
+          //the +1 needs to be wrapped in a function to show up correctly
+          return 'Practice memory test phase complete!';
+      },
+      prompt: 'Ask the experimenter if you have any questions about the procedure of the task. Otherwise, press RETURN to proceed to the real memory task.',
+      choices: ['Enter'],
+      response_ends_trial: true,
+    }
+    timeline.push(end_practice);
+
+
+    // ==================== TASK 1 =============
+
+    // study 1 instruction
+    timeline.push(begin_study);
+
+    // study block 1
+    shuffleArray(prob_old);    // shuffle study list again
+    shuffleArray(fpf_old);
+
+    for (i_study = 0; i_study < study_list_length; i_study++) {
+        var prob_study = {
+            type: 'image-keyboard-response',
+            stimulus: prob_old[i_study],
+            choices: 'NO_KEYS',
+            prompt: '',
+            stimulus_duration: 1000,
+            trial_duration: 1200,       // leaving a gap here so no need for a ITI block
+            response_ends_trial: false,
+            data: {
+                task: 'prob',
+                task_order: prob_in_study,
+                phase: 'study',
+                test_in_task: 0,
+                n_trial: i_study,
+                studied: 1,
+            },
+            on_finish: function(data) {
+                console.log("n_trial: ", data.n_trial+1);
+            },
+        };
+
+        var fpf_study = {
+            type: 'image-keyboard-response',
+            stimulus: fpf_old[i_study],
+            choices: 'NO_KEYS',
+            prompt: '',
+            stimulus_duration: 1000,
+            trial_duration: 1200,       // leaving a gap here so no need for ITI
+            response_ends_trial: false,
+            data: {
+                n_trial: i_study,
+                task: 'FPF',
+                task_order: fpf_in_study,
+                phase: 'study',
+                test_in_task: 0,
+                studied: 1,
+            },
+            on_finish: function(data) {
+                console.log("n_trial: ", data.n_trial+1);
+            },
+        };
+
+        if (prob_fpf_order === 1) {
+            timeline.push(fixation, prob_study);
+        } else if (prob_fpf_order === 2) {
+            timeline.push(fixation, fpf_study);
+        }
+    }
+    timeline.push(end_study);
+
+    // initialize vars to be used in FPF proc
+    // FPF trial counter only
+    var fpf_trial_rolled_t1 = 0;
+    var fpf_trial_rolled_t2 = 0;
+    var fpf_trial_count_t1 = 0;
+    var fpf_trial_count_t2 = 0;
+
+    var roll_fpf = null;            // correct answers don't need to roll for FPF
+    var trial_is_fpf = null;        // default false unless declared true
+
+
+    // task 1 test instructions
+
+    // task 1 test 1
+    // test instruction
+    var test_in_task = 0;
+    timeline.push(begin_test);
+
+    i_test = 0;
+    for (i_test = 0; i_test < study_list_length; i_test++) {
+
+        var prob_test_1 = {
+            type: 'image-keyboard-response',
+            stimulus: prob_cond1[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt + prob_hint_1,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'prob',
+                task_order: prob_in_study,
+                phase: 'test',
+                test_in_task: 1,
+                cond: curr_cond1,
+                studied: prob_cond1[i_test].studied,
+                correct_resp: prob_cond1[i_test].studied,
+            },
+            on_finish: function (data) {
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                }
+                ;
+                console.log("response 1/0: ", data.response_translated);
+
+                // log resp type:
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr";   // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;   // no response (technically not needed if correct but just in case)
+                    }
+                } else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";   // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                }
+                ;
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+
+                if (data.correct) {
+                    total_earned = total_earned + reward_per_correct;
+                    data.earned_so_far = total_earned;
+                }
+                //console.log("earned so far (c): ", total_earned);
+            },
+        };
+
+        var fpf_test_1 = {
+            type: 'image-keyboard-response',
+            stimulus: fpf_cond1[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                task_order: fpf_in_study,
+                phase: 'test',
+                test_in_task: 1,
+                cond: curr_cond1,
+                studied: fpf_cond1[i_test].studied,
+                correct_resp: fpf_cond1[i_test].studied,
+            },
+            on_finish: function(data){
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                }
+                console.log("response 1/0: ", data.response_translated);
+
+                // log resp type
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr";   // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;   // no response (technically not needed if correct but just in case)
+                    }
+                }
+                else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";   // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                };
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+            },
+        }
+
+        var trial_feedback_1 = {
+            type: 'html-keyboard-response',
+            //choices: 'NO_KEYS',
+            choices: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // NO KEYS if correct/wrong feedback, ENTER if too slow (no resp)
+                if (resp_key === null) {
+                    return ['Enter'];
+                } else {return ['NO_KEYS']};
+            },
+            response_ends_trial: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                if (resp_key === null) {
+                    return true;
+                } else {return false};
+            },
+            //stimulus_duration: 500,
+            stimulus_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 500ms if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 500};
+            },
+            //trial_duration: 700,
+            trial_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 200ms ITI (+500) if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 700};
+            },
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                phase: 'test',
+                test_in_task: 1,
+                cond: curr_cond1,
+                studied: fpf_cond1[i_test].studied,
+                correct_resp: fpf_cond1[i_test].studied,
+            },
+            stimulus: function() {
+                let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // correct answers don't need to roll for FPF. this is the same across lib/con
+                if (last_trial_correct) {
+                    roll_fpf = 0;
+                    trial_is_fpf = 0;
+                    total_earned += reward_per_correct;
+                    earned_this_trial = reward_per_correct;  // earned_this_trial is defined differently in FPF because of feedback manipulation
+                    console.log("roll FPF? ", roll_fpf);
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is correct: hit
+                        return feedback_yay;
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is correct: CR
+                        return feedback_yay;
+                    }
+                } else if (!last_trial_correct) {
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is wrong
+                        if (lib_con_fpf === 1) {    // t1 is currently lib, go for FPF for fa
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t1 +=1;
+                            console.log("roll FPF? ", roll_fpf);
+                            var fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                console.log("This is a lib FPF trial!");
+                                fpf_trial_count_t1 +=1;
+                                trial_is_fpf = 1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                console.log("FA but not FPF!");
+                                trial_is_fpf = 0;
+                                earned_this_trial = 0;
+                                return feedback_nay;
+                            }
+                        } else if (lib_con_fpf === 2) {  // t1 is currently con, no FPF
+                            roll_fpf = 0;
+                            earned_this_trial = 0;
+                            return feedback_nay;
+                        }
+
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is wrong: miss
+                        if (lib_con_fpf === 1) {      // t1 is currently lib, no FPF for miss
+                            roll_fpf = 0;
+                            trial_is_fpf = 0;
+                            earned_this_trial = 0;
+                            return feedback_nay;
+                        } else if (lib_con_fpf === 2) {  // t1 is currently con, go for FPF
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t1 +=1;
+                            var fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                console.log("This is a con FPF trial!");
+                                trial_is_fpf = 1;
+                                fpf_trial_count_t1 +=1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                trial_is_fpf = 0;
+                                earned_this_trial = 0;
+                                console.log("Miss but not FPF!");
+                                return feedback_nay;
+                            }
+                        }
+                    } else if (resp_key === null) {
+                        roll_fpf = 0;
+                        trial_is_fpf = 0;
+                        earned_this_trial = 0;
+                        console.log("roll FPF? ", roll_fpf);
+                        return feedback_meh + feedback_interrupted;
+                    }
+                };
+                console.log("roll FPF? ", roll_fpf);
+            },
+            on_finish: function(data){
+                data.roll_fpf = roll_fpf;
+                data.trial_is_fpf = trial_is_fpf;
+                data.earned_so_far = total_earned;
+                data.earned_this_trial = earned_this_trial;
+                console.log("earned so far (c): ", total_earned);
+            },
+        };
+
+        if (prob_fpf_order === 1) {
+            timeline.push(prob_test_1, too_slow);
+        } else if (prob_fpf_order === 2) {
+            timeline.push(fpf_test_1, trial_feedback_1);
+        }
+    };
+    timeline.push(end_test);
+
+    // task 1 test 2
+    // test instruction
+    timeline.push(begin_test);
+
+    i_test = 0;
+    for (i_test = 0; i_test < study_list_length; i_test++) {
+        var prob_test_2 = {
+            type: 'image-keyboard-response',
+            stimulus: prob_cond2[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt + prob_hint_2,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'prob',
+                task_order: prob_in_study,
+                phase: 'test',
+                test_in_task: 2,
+                cond: curr_cond2,
+                studied: prob_cond2[i_test].studied,
+                correct_resp: prob_cond2[i_test].studied,
+            },
+            on_finish: function (data) {
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                };
+                console.log("response 1/0: ", data.response_translated);
+
+                // log resp type:
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr";   // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;   // no response (technically not needed if correct but just in case)
+                    }
+                }
+                else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";   // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                };
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+
+                if (data.correct) {
+                    total_earned = total_earned + reward_per_correct;
+                    data.earned_so_far = total_earned;
+                }
+                console.log("earned so far (c): ", total_earned);
+            }
+        };
+
+        var fpf_test_2 = {
+            type: 'image-keyboard-response',
+            stimulus: fpf_cond2[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                task_order: fpf_in_study,
+                phase: 'test',
+                test_in_task: 2,
+                cond: curr_cond2,
+                studied: fpf_cond2[i_test].studied,
+                correct_resp: fpf_cond2[i_test].studied,
+            },
+            on_finish: function(data){
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                }
+                console.log("response 1/0: ", data.response_translated);
+
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr"; // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;  // no response (technically not needed if correct but just in case)
+                    }
+                }
+                else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";  // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                }
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+            }
+        }
+
+        var trial_feedback_2 = {
+            type: 'html-keyboard-response',
+            //choices: 'NO_KEYS',
+            choices: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // NO KEYS if correct/wrong feedback, ENTER if too slow (no resp)
+                if (resp_key === null) {
+                    return ['Enter'];
+                } else {return ['NO_KEYS']};
+            },
+            response_ends_trial: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                if (resp_key === null) {
+                    return true;
+                } else {return false};
+            },
+            //stimulus_duration: 500,
+            stimulus_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 500ms if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 500};
+            },
+            //trial_duration: 700,
+            trial_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 200ms ITI (+500) if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 700};
+            },
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                phase: 'test',
+                test_in_task: 2,
+                cond: curr_cond2,
+                studied: fpf_cond2[i_test].studied,
+                correct_resp: fpf_cond2[i_test].studied,
+            },
+            stimulus: function() {
+                let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                if (last_trial_correct) {
+                    roll_fpf = 0;
+                    trial_is_fpf = 0;
+                    total_earned += reward_per_correct;
+                    earned_this_trial = reward_per_correct;
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is correct: hit
+                        return feedback_yay;
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is correct: CR
+                        return feedback_yay;
+                    }
+                } else if (!last_trial_correct) {
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is wrong
+                        if (lib_con_fpf === 2) {    // t2 is currently lib, go for FPF for fa
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t2 +=1;
+                            var fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                //console.log("This is a lib FPF trial!");
+                                trial_is_fpf = 1;
+                                fpf_trial_count_t2 +=1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                //console.log("FA but not FPF!");
+                                earned_this_trial = 0;
+                                return feedback_nay;
+                            }
+                        } else if (lib_con_fpf === 1) {  // t2 is currently con, no FPF
+                            earned_this_trial = 0;
+                            return feedback_nay;
+                        }
+
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is wrong: miss
+                        if (lib_con_fpf === 2) {      // t2 is currently lib, no FPF for miss
+                            roll_fpf = 0;
+                            earned_this_trial = 0;
+                            //console.log("roll FPF? ", roll_fpf);
+                            return feedback_nay;
+                        } else if (lib_con_fpf === 1) {  // t2 is currently con, go for FPF
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t2 +=1;
+                            //console.log("roll FPF? ", roll_fpf);
+                            fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                //console.log("This is a con FPF trial!");
+                                trial_is_fpf = 1;
+                                fpf_trial_count_t2 +=1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                earned_this_trial = 0;
+                                trial_is_fpf = 0;
+                                //console.log("Miss but not FPF!");
+                                return feedback_nay;
+                            }
+                        }
+                    } else if (resp_key === null) {
+                        roll_fpf = 0;
+                        trial_is_fpf = 0;
+                        earned_this_trial = 0;
+                        //console.log("roll FPF? ", roll_fpf);
+                        return feedback_meh + feedback_interrupted;
+                    }
+                }
+            },
+            on_finish: function(data){
+                data.roll_fpf = roll_fpf;
+                data.trial_is_fpf = trial_is_fpf;
+                data.earned_this_trial = earned_this_trial;
+                data.earned_so_far = total_earned;
+                console.log("earned so far (c): ", total_earned);
+            },
+        };
+
+        if (prob_fpf_order === 1) {
+            timeline.push(prob_test_2, too_slow);
+        } else if (prob_fpf_order === 2) {
+            timeline.push(fpf_test_2, trial_feedback_2);
+        }
+    };
+    timeline.push(end_test);
+
+
+    // ==================== TASK 2 =======================
+
+    timeline.push(begin_study);
+    // study
+    i_study = 0;
+    for (i_study = 0; i_study < study_list_length; i_study++) {
+        var prob_study = {
+            type: 'image-keyboard-response',
+            stimulus: prob_old[i_study],
+            choices: 'NO_KEYS',
+            prompt: '',
+            stimulus_duration: 1000,
+            trial_duration: 1200,       // leaving a gap here so no need for a ITI block
+            response_ends_trial: false,
+            data: {
+                task: 'prob',
+                task_order: prob_in_study,
+                phase: 'study',
+                test_in_task: 0,
+                n_trial: i_study,
+                studied: 1,
+            },
+            on_finish: function(data) {
+                console.log("n_trial: ", data.n_trial+1);
+            },
+        };
+
+        var fpf_study = {
+            type: 'image-keyboard-response',
+            stimulus: fpf_old[i_study],
+            choices: 'NO_KEYS',
+            prompt: '',
+            stimulus_duration: 1000,
+            trial_duration: 1200,       // leaving a gap here so no need for ITI
+            response_ends_trial: false,
+            data: {
+                n_trial: i_study,
+                task: 'FPF',
+                task_order: fpf_in_study,
+                phase: 'study',
+                test_in_task: 0,
+                studied: 1,
+            },
+            on_finish: function(data) {
+                console.log("n_trial: ", data.n_trial+1);
+            },
+        };
+        // currently task 3!!
+        if (prob_fpf_order === 1) {
+            timeline.push(fixation, fpf_study);
+        } else if (prob_fpf_order === 2) {
+            timeline.push(fixation, prob_study);
+        }
+    }
+
+    timeline.push(end_study);
+
+
+
+    // task 2 test 1
+    var test_in_task = 0;
+    timeline.push(begin_test);
+
+    i_test = 0;
+    for (i_test = 0; i_test < study_list_length; i_test++) {
+        var prob_test_1 = {
+            type: 'image-keyboard-response',
+            stimulus: prob_cond1[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt + prob_hint_1,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'prob',
+                task_order: prob_in_study,
+                phase: 'test',
+                test_in_task: 1,
+                cond: curr_cond1,
+                studied: prob_cond1[i_test].studied,
+                correct_resp: prob_cond1[i_test].studied,
+            },
+            on_finish: function (data) {
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                };
+                console.log("response 1/0: ", data.response_translated);
+
+                // log resp type
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr";   // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;   // no response (technically not needed if correct but just in case)
+                    }
+                } else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";   // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                }
+                ;
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+
+                if (data.correct) {
+                    total_earned = total_earned + reward_per_correct;
+                    data.earned_so_far = total_earned;
+                }
+                console.log("earned so far (c): ", total_earned);
+            },
+        };
+
+        var fpf_test_1 = {
+            type: 'image-keyboard-response',
+            stimulus: fpf_cond1[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                task_order: fpf_in_study,
+                phase: 'test',
+                test_in_task: 1,
+                cond: curr_cond1,
+                studied: fpf_cond1[i_test].studied,
+                correct_resp: fpf_cond1[i_test].studied,
+            },
+            on_finish: function(data){
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                }
+                console.log("response 1/0: ", data.response_translated);
+
+                // log resp type:
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr";   // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;   // no response (technically not needed if correct but just in case)
+                    }
+                }
+                else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";   // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                };
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+            },
+        }
+
+        var trial_feedback_1 = {
+            type: 'html-keyboard-response',
+            //choices: 'NO_KEYS',
+            choices: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // NO KEYS if correct/wrong feedback, ENTER if too slow (no resp)
+                if (resp_key === null) {
+                    return ['Enter'];
+                } else {return ['NO_KEYS']};
+            },
+            response_ends_trial: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                if (resp_key === null) {
+                    return true;
+                } else {return false};
+            },
+            //stimulus_duration: 500,
+            stimulus_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 500ms if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 500};
+            },
+            //trial_duration: 700,
+            trial_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 200ms ITI (+500) if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 700};
+            },
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                phase: 'test',
+                test_in_task: 1,
+                cond: curr_cond1,
+                studied: fpf_cond1[i_test].studied,
+                correct_resp: fpf_cond1[i_test].studied,
+            },
+            stimulus: function() {
+                let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // correct answers don't need to roll for FPF. this is the same across lib/con
+                if (last_trial_correct) {
+                    roll_fpf = 0;
+                    trial_is_fpf = 0;
+                    total_earned += reward_per_correct;
+                    earned_this_trial = reward_per_correct;  // earned_this_trial is defined differently in FPF because of feedback manipulation
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is correct: hit
+                        return feedback_yay;
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is correct: CR
+                        return feedback_yay;
+                    }
+                } else if (!last_trial_correct) {
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is wrong
+                        if (lib_con_fpf === 1) {    // t1 is currently lib, go for FPF for fa
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t1 +=1;
+                            var fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                console.log("This is a lib FPF trial!");
+                                fpf_trial_count_t1 +=1;
+                                trial_is_fpf = 1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                console.log("FA but not FPF!");
+                                trial_is_fpf = 0;
+                                earned_this_trial = 0;
+                                return feedback_nay;
+                            }
+                        } else if (lib_con_fpf === 2) {  // t1 is currently con, no FPF
+                            roll_fpf = 0;
+                            earned_this_trial = 0;
+                            return feedback_nay;
+                        }
+
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is wrong: miss
+                        if (lib_con_fpf === 1) {      // t1 is currently lib, no FPF for miss
+                            roll_fpf = 0;
+                            trial_is_fpf = 0;
+                            earned_this_trial = 0;
+                            return feedback_nay;
+                        } else if (lib_con_fpf === 2) {  // t1 is currently con, go for FPF
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t1 +=1;
+                            var fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                console.log("This is a con FPF trial!");
+                                trial_is_fpf = 1;
+                                fpf_trial_count_t1 +=1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                trial_is_fpf = 0;
+                                earned_this_trial = 0;
+                                console.log("Miss but not FPF!");
+                                return feedback_nay;
+                            }
+                        }
+                    } else if (resp_key === null) {
+                        roll_fpf = 0;
+                        trial_is_fpf = 0;
+                        earned_this_trial = 0;
+                        console.log("roll FPF? ", roll_fpf);
+                        return feedback_meh + feedback_interrupted;
+                    }
+                };
+                console.log("roll FPF? ", roll_fpf);
+            },
+            on_finish: function(data){
+                data.roll_fpf = roll_fpf;
+                data.trial_is_fpf = trial_is_fpf;
+                data.earned_so_far = total_earned;
+                data.earned_this_trial = earned_this_trial;
+                console.log("earned so far (c): ", total_earned);
+            },
+        };
+
+        if (prob_fpf_order === 1) {
+            timeline.push(fpf_test_1, trial_feedback_1);
+        } else if (prob_fpf_order === 2) {
+            timeline.push(prob_test_1, too_slow);
+        }
+    };
+
+    timeline.push(end_test);
+
+
+    // task 2 test 2
+    timeline.push(begin_test);
+
+    i_test = 0;
+    for (i_test = 0; i_test < study_list_length; i_test++) {
+        var prob_test_2 = {
+            type: 'image-keyboard-response',
+            stimulus: prob_cond2[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt + prob_hint_2,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'prob',
+                task_order: prob_in_study,
+                phase: 'test',
+                test_in_task: 2,
+                cond: curr_cond2,
+                studied: prob_cond2[i_test].studied,
+                correct_resp: prob_cond2[i_test].studied,
+            },
+            on_finish: function (data) {
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                };
+                console.log("response 1/0: ", data.response_translated);
+
+                // log resp type
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr";   // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;   // no response (technically not needed if correct but just in case)
+                    }
+                }
+                else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";   // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                };
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+
+                if (data.correct) {
+                    total_earned = total_earned + reward_per_correct;
+                    data.earned_so_far = total_earned;
+                }
+                console.log("earned so far (c): ", total_earned);
+            }
+        };
+
+        var fpf_test_2 = {
+            type: 'image-keyboard-response',
+            stimulus: fpf_cond2[i_test].img_name,
+            choices: [old_low_key, old_high_key, new_low_key, new_high_key],
+            prompt: old_new_key_prompt,
+            trial_duration: 10000,
+            response_ends_trial: true,
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                task_order: fpf_in_study,
+                phase: 'test',
+                test_in_task: 2,
+                cond: curr_cond2,
+                studied: fpf_cond2[i_test].studied,
+                correct_resp: fpf_cond2[i_test].studied,
+            },
+            on_finish: function(data){
+                console.log("n_trial: ", data.n_trial+1);
+                console.log("studied 1/0: ", data.correct_resp);
+
+                // log resp confidence level
+                if (data.response === old_low_key || data.response === new_low_key) {
+                  data.response_confidence = "low";
+                } else if (data.response === old_high_key || data.response === new_high_key) {
+                  data.response_confidence = "high";
+                } else if (data.response === null) {
+                  data.response_confidence = null;
+                }
+                console.log("confidence: ", data.response_confidence);
+
+                // log resp accuracy
+                if (data.response === old_low_key || data.response === old_high_key) {
+                    data.response_translated = 1;
+                } else if (data.response === new_low_key || data.response === new_high_key) {
+                    data.response_translated = 0;
+                } else if (data.response === null) {
+                    data.response_translated = 99;
+                }
+                console.log("response 1/0: ", data.response_translated);
+
+                // log resp type
+                if (jsPsych.pluginAPI.compareKeys(data.response_translated, data.correct_resp)) {
+                    data.correct = true;
+                    data.earned_this_trial = reward_per_correct;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = 'hit';  // resp=old, is correct: hit
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "cr"; // resp=new, is correct: CR
+                    } else {
+                        data.resp_type_real = null;  // no response (technically not needed if correct but just in case)
+                    }
+                }
+                else {
+                    data.correct = false;
+                    data.earned_this_trial = 0;
+                    if (data.response_translated === 1) {
+                        data.resp_type_real = "fa";  // resp=old, incorrect: FA (lib)
+                    } else if (data.response_translated === 0) {
+                        data.resp_type_real = "miss"; // resp=new, incorrect: miss (con)
+                    } else {
+                        data.resp_type_real = null;
+                    }
+                }
+                console.log("is correct: ", data.correct);
+                console.log("resp type real: ", data.resp_type_real);
+            }
+        }
+
+        var trial_feedback_2 = {
+            type: 'html-keyboard-response',
+            //choices: 'NO_KEYS',
+            choices: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // NO KEYS if correct/wrong feedback, ENTER if too slow (no resp)
+                if (resp_key === null) {
+                    return ['Enter'];
+                } else {return ['NO_KEYS']};
+            },
+            response_ends_trial: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                if (resp_key === null) {
+                    return true;
+                } else {return false};
+            },
+            //stimulus_duration: 500,
+            stimulus_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 500ms if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 500};
+            },
+            //trial_duration: 700,
+            trial_duration: function() {
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                // 200ms ITI (+500) if correct/wrong feedback, null if too slow (no resp)
+                if (resp_key === null) {
+                    return null;
+                } else {return 700};
+            },
+            data: {
+                n_trial: i_test,
+                task: 'FPF',
+                phase: 'test',
+                test_in_task: 2,
+                cond: curr_cond2,
+                studied: fpf_cond2[i_test].studied,
+                correct_resp: fpf_cond2[i_test].studied,
+            },
+            stimulus: function() {
+                let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
+                let resp_key = jsPsych.data.get().last(1).values()[0].response;
+                if (last_trial_correct) {
+                    roll_fpf = 0;
+                    trial_is_fpf = 0;
+                    total_earned += reward_per_correct;
+                    earned_this_trial = reward_per_correct;
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is correct: hit
+                        return feedback_yay;
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is correct: CR
+                        return feedback_yay;
+                    }
+                } else if (!last_trial_correct) {
+                    if (resp_key === this_old_low_key || resp_key === this_old_high_key) {  // resp=old, is wrong
+                        if (lib_con_fpf === 2) {    // t2 is currently lib, go for FPF for fa
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t2 +=1;
+                            var fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                console.log("This is a lib FPF trial!");
+                                trial_is_fpf = 1;
+                                fpf_trial_count_t2 +=1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                console.log("FA but not FPF!");
+                                earned_this_trial = 0;
+                                return feedback_nay;
+                            }
+                        } else if (lib_con_fpf === 1) {  // t2 is currently con, no FPF
+                            earned_this_trial = 0;
+                            return feedback_nay;
+                        }
+
+                    } else if (resp_key === this_new_low_key || resp_key === this_new_high_key) {  // resp=new, is wrong: miss
+                        if (lib_con_fpf === 2) {      // t2 is currently lib, no FPF for miss
+                            roll_fpf = 0;
+                            earned_this_trial = 0;
+                            console.log("roll FPF? ", roll_fpf);
+                            return feedback_nay;
+                        } else if (lib_con_fpf === 1) {  // t2 is currently con, go for FPF
+                            roll_fpf = 1;
+                            fpf_trial_rolled_t2 +=1;
+                            console.log("roll FPF? ", roll_fpf);
+                            fpf_chance = roll_dice(1, 101);
+                            if (fpf_chance <= 75) {
+                                console.log("This is a con FPF trial!");
+                                trial_is_fpf = 1;
+                                fpf_trial_count_t2 +=1;
+                                total_earned += reward_per_correct;
+                                earned_this_trial = reward_per_correct;
+                                return feedback_yay;
+                            } else {
+                                earned_this_trial = 0;
+                                trial_is_fpf = 0;
+                                console.log("Miss but not FPF!");
+                                return feedback_nay;
+                            }
+                        }
+                    } else if (resp_key === null) {
+                        roll_fpf = 0;
+                        trial_is_fpf = 0;
+                        earned_this_trial = 0;
+                        console.log("roll FPF? ", roll_fpf);
+                        return feedback_meh + feedback_interrupted;
+                    }
+                }
+            },
+            on_finish: function(data){
+                data.roll_fpf = roll_fpf;
+                data.trial_is_fpf = trial_is_fpf;
+                data.earned_this_trial = earned_this_trial;
+                data.earned_so_far = total_earned;
+                console.log("earned so far (c): ", total_earned);
+            },
+        };
+
+        if (prob_fpf_order === 1) {
+            timeline.push(fpf_test_2, trial_feedback_2);
+        } else if (prob_fpf_order === 2) {
+            timeline.push(prob_test_2, too_slow);
+        }
+    };
+
+    timeline.push(end_test);
+
+
+
+    // ==================== END OF BOTH MEM TASKS ==========================
+    var end_all_task = {
+        type: 'html-keyboard-response',
+        stimulus: 'All memory study and test phases complete!',
+        prompt: 'Press RETURN to continue.',
+        choices: ['Enter'],
+        response_ends_trial: true,
+        post_trial_gap: 300,
+    };
+    timeline.push(end_all_task);
+
+
+    // ==================== count/show total $ earned ==================
+    var show_total_earned = {
+        type: 'html-keyboard-response',
+        // need to wrap global var in function for it to be accessible!!!
+        stimulus: function () {
+            var total_earned_dol = total_earned / 100;
+            return 'You earned $' + total_earned_dol + ' from the study!';
+        },
+        prompt:
+            '<p>Your final payment amount has been recorded in the data, but you can take a photo for your own record.</p>' +
+            '<p>We will send you your payment and a DocuSign payment acknowledgement form in the next 2-3 days.</p>' +
+            '<p>For the final part of the study, you will answer some survey questions about your experience in the study.</p>' +
+            '<p>Press RETURN to submit your study data. Then, you will be redirected to the survey.</p>',
+        choices: ['Enter'],
+        post_trial_gap: 200,
+
+        // log payment amount in all trials for easy access
+        // verify in data (collected) that this matches with total # correct (including FPF)
+        on_finish: function (data) {
+            data.total_earned_amt = total_earned;
+        },
+    }
+
+    //jsPsych.data.addProperties({
+    //    total_earned_amt_final: total_earned    // this doesn't work because total_earned is added at the beginning when it was 0
+    //});  // tag total amount earned to ALL trials for easy access & verification
+
+    timeline.push(show_total_earned);
+
+
+    // ==================== save data ==================================
+
+    function saveData(name, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({filedata: data}));
+    }
+
+    /* finish connection with pavlovia.org */
+    var pavlovia_finish = {
+        on_start: function() {
+            saveData(jsPsych.data.get().csv());
+        },
+        type: "pavlovia",
+        command: "finish"
+    };
+    timeline.push(pavlovia_finish);
+    /* edit out for local run */
+
+
+    jsPsych.init({
+        timeline: timeline,
+        override_safe_mode: true,
+        on_finish: function () {
+            console.log('All done!');
+            saveData(jsPsych.data.get().csv());
+//            jsPsych.data.displayData();                 // edit out display data for online version
+        }
+    })
+
+    // ==================== redirect to qualtrics survey =======================
+    // leave out for local run, but remember to TEST THIS with new survey after exp is built
+    jsPsych.init({
+            timeline: timeline,
+            on_finish: function () {
+                document.body.innerHTML = '<p>You are being redirected to the post-study survey. Click "leave site" if the browser prompts you to do so.</p>'
+                setTimeout(function () { location.href = "https://ucsb.co1.qualtrics.com/jfe/form/SV_6SfUPh5SKAao4lM" }, 5000)
+            }
+        })
+
+
+</script>
+</html>
