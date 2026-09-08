@@ -17,4 +17,4 @@
 
 **Questions and comments:** luna.0x4c@gmail.com (personal); luna.li@psych.ucsb.edu (institutional)
 
-**Study pre-registration:** https://doi.org/10.17605/osf.io/mk32v
+**Study preregistration:** https://doi.org/10.17605/osf.io/mk32v
